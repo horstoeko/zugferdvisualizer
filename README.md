@@ -14,7 +14,8 @@
   - [Installation](#installation)
   - [Usage](#usage)
     - [Create HTML markup from existing invoice document (XML) using built-in template](#create-html-markup-from-existing-invoice-document-xml-using-built-in-template)
-    - [Create a PDF from existing invoice document (XML) using built-in template](#create-a-pdf-from-existing-invoice-document-xml-using-built-in-template)
+    - [Create a PDF file from existing invoice document (XML) using built-in template](#create-a-pdf-file-from-existing-invoice-document-xml-using-built-in-template)
+    - [Create a PDF string from existing invoice document (XML) using built-in template](#create-a-pdf-string-from-existing-invoice-document-xml-using-built-in-template)
     - [Create a custom renderer](#create-a-custom-renderer)
     - [Use a custom renderer](#use-a-custom-renderer)
 
@@ -65,7 +66,7 @@ $visualizer->setDefaultTemplate();
 echo $visualizer->renderMarkup();
 ```
 
-### Create a PDF from existing invoice document (XML) using built-in template
+### Create a PDF file from existing invoice document (XML) using built-in template
 
 ```php
 use horstoeko\zugferd\ZugferdDocumentReader;
@@ -79,6 +80,23 @@ $visualizer = new ZugferdVisualizer($document);
 $visualizer->setDefaultTemplate();
 $visualizer->setPdfFontDefault("courier");
 $visualizer->renderPdfFile(dirname(__FILE__) . "/invoice_1.pdf");
+```
+
+### Create a PDF string from existing invoice document (XML) using built-in template
+
+```php
+use horstoeko\zugferd\ZugferdDocumentReader;
+use horstoeko\zugferdvisualizer\ZugferdVisualizer;
+
+require dirname(__FILE__) . "/../vendor/autoload.php";
+
+$document = ZugferdDocumentReader::readAndGuessFromFile(dirname(__FILE__) . "/invoice_1.xml");
+
+$visualizer = new ZugferdVisualizer($document);
+$visualizer->setDefaultTemplate();
+$visualizer->setPdfFontDefault("courier");
+
+$pdfString = $visualizer->renderPdf();
 ```
 
 ### Create a custom renderer
