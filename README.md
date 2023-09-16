@@ -89,6 +89,8 @@ If you want to implement your own markup renderer, then your class must implemen
 * `render`
 
 ```php
+use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract;
+
 class MyOwnRenderer implements ZugferdVisualizerMarkupRendererContract
 {
     public function templateExists(string $template): bool
