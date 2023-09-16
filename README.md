@@ -13,8 +13,10 @@
   - [Dependencies](#dependencies)
   - [Installation](#installation)
   - [Usage](#usage)
-    - [Visualize an existing invoice document (XML)](#visualize-an-existing-invoice-document-xml)
+    - [Create HTML markup from existing invoice document (XML) using built-in template](#create-html-markup-from-existing-invoice-document-xml-using-built-in-template)
+    - [Create a PDF from existing invoice document (XML) using built-in template](#create-a-pdf-from-existing-invoice-document-xml-using-built-in-template)
     - [Create own render](#create-own-render)
+    - [Use a custom renderer](#use-a-custom-renderer)
 
 ## License
 
@@ -47,7 +49,23 @@ There is one recommended way to install `horstoeko/zugferdvisualizer` via [Compo
 
 ## Usage
 
-### Visualize an existing invoice document (XML)
+### Create HTML markup from existing invoice document (XML) using built-in template
+
+```php
+use horstoeko\zugferd\ZugferdDocumentReader;
+use horstoeko\zugferdvisualizer\ZugferdVisualizer;
+
+require dirname(__FILE__) . "/../vendor/autoload.php";
+
+$document = ZugferdDocumentReader::readAndGuessFromFile(dirname(__FILE__) . "/invoice_1.xml");
+
+$visualizer = new ZugferdVisualizer($document);
+$visualizer->setDefaultTemplate();
+
+echo $visualizer->renderMarkup();
+```
+
+### Create a PDF from existing invoice document (XML) using built-in template
 
 ```php
 use horstoeko\zugferd\ZugferdDocumentReader;
@@ -85,4 +103,21 @@ class MyOwnRenderer implements ZugferdVisualizerMarkupRendererContract
         // Method must return a string (rendered HTML markup)
     }
 }
+```
+
+### Use a custom renderer
+
+```php
+use horstoeko\zugferd\ZugferdDocumentReader;
+use horstoeko\zugferdvisualizer\ZugferdVisualizer;
+
+require dirname(__FILE__) . "/../vendor/autoload.php";
+
+$document = ZugferdDocumentReader::readAndGuessFromFile(dirname(__FILE__) . "/invoice_1.xml");
+
+$visualizer = new ZugferdVisualizer($document);
+$visualizer->setRenderer(new MyOwnRenderer());
+$visualizer->setTemplate('/assets/myowntemplate.tmpl');
+
+echo $visualizer->renderMarkup();
 ```
