@@ -81,3 +81,5 @@ _backup*
 /build/phpdoc/
 /*.phar
 /composer.lock
+
+/examples/invoice_1.pdf
