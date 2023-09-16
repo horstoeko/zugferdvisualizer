@@ -115,7 +115,7 @@ class ZugferdVisualizer
     public function setDefaultTemplate(): void
     {
         $this->setRenderer(new ZugferdVisualizerDefaultRenderer());
-        $this->setTemplate(dirname(__FILE__) . "/template/default.php");
+        $this->setTemplate(dirname(__FILE__) . "/template/default.tmpl");
     }
 
     /**
