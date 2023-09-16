@@ -13,6 +13,8 @@
   - [Dependencies](#dependencies)
   - [Installation](#installation)
   - [Usage](#usage)
+    - [Visualize an existing invoice document (XML)](#visualize-an-existing-invoice-document-xml)
+    - [Create own render](#create-own-render)
 
 ## License
 
@@ -44,3 +46,43 @@ There is one recommended way to install `horstoeko/zugferdvisualizer` via [Compo
 ```
 
 ## Usage
+
+### Visualize an existing invoice document (XML)
+
+```php
+use horstoeko\zugferd\ZugferdDocumentReader;
+use horstoeko\zugferdvisualizer\ZugferdVisualizer;
+
+require dirname(__FILE__) . "/../vendor/autoload.php";
+
+$document = ZugferdDocumentReader::readAndGuessFromFile(dirname(__FILE__) . "/invoice_1.xml");
+
+$visualizer = new ZugferdVisualizer($document);
+$visualizer->setDefaultTemplate();
+$visualizer->setPdfFontDefault("courier");
+$visualizer->renderPdfFile(dirname(__FILE__) . "/invoice_1.pdf");
+```
+
+### Create own render
+
+If you want to implement your own markup renderer, then your class must implement the interface `ZugferdVisualizerMarkupRendererContract`. Das Interface definiert zwei Methoden
+
+* `templateExists`
+* `render`
+
+```php
+class MyOwnRenderer implements ZugferdVisualizerMarkupRendererContract
+{
+    public function templateExists(string $template): bool
+    {
+        // Put your logic here
+        // Method must return a boolean value
+    }
+
+    public function render(ZugferdDocument $document, string $template): string
+    {
+        // Put your logic here
+        // Method must return a string (rendered HTML markup)
+    }
+}
+```
