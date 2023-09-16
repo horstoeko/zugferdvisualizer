@@ -83,7 +83,7 @@ $visualizer->renderPdfFile(dirname(__FILE__) . "/invoice_1.pdf");
 
 ### Create own render
 
-If you want to implement your own markup renderer, then your class must implement the interface `ZugferdVisualizerMarkupRendererContract`. Das Interface definiert zwei Methoden
+If you want to implement your own markup renderer, then your class must implement the interface `ZugferdVisualizerMarkupRendererContract`. The interface defines two methods:
 
 * `templateExists`
 * `render`
