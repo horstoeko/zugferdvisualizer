@@ -21,7 +21,7 @@ use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContrac
  * @license  https://opensource.org/licenses/MIT MIT
  * @link     https://github.com/horstoeko/zugferdvisualizer
  */
-class ZugferdVisualizerDefaultRenderer implements ZugferdVisualizerMarkupRendererContract
+class ZugferdVisualizerLaravelRenderer implements ZugferdVisualizerMarkupRendererContract
 {
     /**
      * @inheritDoc
