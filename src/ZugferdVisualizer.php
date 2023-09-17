@@ -82,16 +82,19 @@ class ZugferdVisualizer
     public function __construct(ZugferdDocument $document, ?ZugferdVisualizerMarkupRendererContract $renderer = null)
     {
         $this->document = $document;
-        $this->setRenderer($renderer);
+
+        if ($renderer) {
+            $this->setRenderer($renderer);
+        }
     }
 
     /**
      * Setup the renderer to use for generating markup
      *
-     * @param ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @param ZugferdVisualizerMarkupRendererContract $renderer
      * @return void
      */
-    public function setRenderer(?ZugferdVisualizerMarkupRendererContract $renderer): void
+    public function setRenderer(ZugferdVisualizerMarkupRendererContract $renderer): void
     {
         $this->renderer = $renderer;
     }
