@@ -137,7 +137,7 @@ class ZugferdVisualizer
     }
 
     /**
-     * Sets the PDF default font
+     * Sets the default PDF default font
      *
      * @param  string $pdfFontDefault
      * @return void
@@ -145,6 +145,17 @@ class ZugferdVisualizer
     public function setPdfFontDefault(string $pdfFontDefault): void
     {
         $this->pdfFontDefault = $pdfFontDefault;
+    }
+
+    /**
+     * Set the default PDF paper size
+     *
+     * @param string $paperSize
+     * @return void
+     */
+    public function setPdfPaperSize(string $paperSize): void
+    {
+        $this->pdfPaperSize = $paperSize;
     }
 
     /**
