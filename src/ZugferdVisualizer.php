@@ -9,9 +9,8 @@
 
 namespace horstoeko\zugferdvisualizer;
 
-use Mpdf\Mpdf;
-use Mpdf\Config\FontVariables;
-use Mpdf\Config\ConfigVariables;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use horstoeko\zugferd\ZugferdDocument;
 use horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer;
 use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract;
@@ -54,17 +53,9 @@ class ZugferdVisualizer
     /**
      * The directories where to search for additional fonts
      *
-     * @var array
+     * @var string
      */
-    protected $pdfFontDirectories = [];
-
-    /**
-     * The definitions for additional fonts
-     *
-     * @var array
-     * @see https://mpdf.github.io/fonts-languages/fonts-in-mpdf-7-x.html
-     */
-    protected $pdfFontData = [];
+    protected $pdfFontDirectory = "";
 
     /**
      * The PDF default font
@@ -72,6 +63,14 @@ class ZugferdVisualizer
      * @var string
      */
     protected $pdfFontDefault = "dejavusans";
+
+    /**
+     * The PDF paper size
+     *
+     * @var string
+     * @see \Dompdf\Adapter\CPDF::PAPER_SIZES for valid sizes
+     */
+    protected $pdfPaperSize = "a4";
 
     /**
      * Constructor
@@ -125,16 +124,16 @@ class ZugferdVisualizer
      * Add an additional directory where the PDF-Engine will
      * search for fonts
      *
-     * @param  string $directory
+     * @param  string $fontDirectory
      * @return void
      */
-    public function addPdfFontDirectory(string $directory): void
+    public function setPdfFontDirectory(string $fontDirectory): void
     {
-        if (!file_exists($directory)) {
+        if (!file_exists($fontDirectory)) {
             return;
         }
 
-        $this->pdfFontDirectories[] = $directory;
+        $this->pdfFontDirectory = $fontDirectory;
     }
 
     /**
@@ -176,9 +175,9 @@ class ZugferdVisualizer
         $markup = $this->renderMarkup();
 
         $pdf = $this->instanciatePdfEngine();
-        $pdf->WriteHTML($markup);
+        $pdf->loadHtml($markup);
 
-        return $pdf->Output('dummy.pdf', 'S');
+        return $pdf->output();
     }
 
     /**
@@ -192,8 +191,12 @@ class ZugferdVisualizer
         $markup = $this->renderMarkup();
 
         $pdf = $this->instanciatePdfEngine();
-        $pdf->WriteHTML($markup);
-        $pdf->Output($toFilename, 'F');
+        $pdf->loadHtml($markup);
+        $pdf->render();
+
+        $pdfContent = $pdf->output();
+
+        file_put_contents($toFilename, $pdfContent);
     }
 
     /**
@@ -254,24 +257,16 @@ class ZugferdVisualizer
     /**
      * Returns a new instance of the PDF-Engine (MPDF)
      *
-     * @return Mpdf
+     * @return Dompdf
      */
-    private function instanciatePdfEngine(): Mpdf
+    private function instanciatePdfEngine(): Dompdf
     {
-        $defaultConfig = (new ConfigVariables())->getDefaults();
-        $defaultFontDirs = $defaultConfig['fontDir'];
+        $pdfOptions = new Options();
+        $pdfOptions->setTempDir(sys_get_temp_dir() . '/dompdf');
+        $pdfOptions->setDefaultFont($this->pdfFontDefault);
+        $pdfOptions->setDefaultPaperSize($this->pdfPaperSize);
 
-        $defaultFontConfig = (new FontVariables())->getDefaults();
-        $defaultFontData = $defaultFontConfig['fontdata'];
-
-        $pdf = new Mpdf(
-            [
-            'tempDir' => sys_get_temp_dir() . '/mpdf',
-            'fontDir' => array_merge($defaultFontDirs, $this->pdfFontDirectories),
-            'fontdata' => $defaultFontData + $this->pdfFontData,
-            'default_font' => $this->pdfFontDefault,
-            ]
-        );
+        $pdf = new Dompdf($pdfOptions);
 
         return $pdf;
     }

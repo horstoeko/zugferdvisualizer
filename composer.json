@@ -29,9 +29,9 @@
     },
     "require": {
         "php": "^7.3|^7.4|^8.0|^8.1|^8.2|^8.3",
-        "league/commonmark": "^1|^2",
-        "mpdf/mpdf": "^8",
-        "horstoeko/zugferd": "^1"
+        "dompdf/dompdf": "^2.0",
+        "horstoeko/zugferd": "^1",
+        "league/commonmark": "^1|^2"
     },
     "require-dev": {
         "pdepend/pdepend": "^2",
