@@ -37,7 +37,7 @@ class ZugferdVisualizerDefaultRenderer implements ZugferdVisualizerMarkupRendere
     public function render(ZugferdDocument $document, string $template): string
     {
         ob_start();
-        require $template;
+        include $template;
         $markup = ob_get_clean();
 
         if (false === $markup) {

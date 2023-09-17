@@ -25,7 +25,7 @@ interface ZugferdVisualizerMarkupRendererContract
     /**
      * Returns true if the given template exists, otherwise false
      *
-     * @param string $template
+     * @param  string $template
      * @return boolean
      */
     public function templateExists(string $template): bool;
@@ -33,8 +33,8 @@ interface ZugferdVisualizerMarkupRendererContract
     /**
      * Render the HTML markup for the Zugferd document
      *
-     * @param ZugferdDocument $document
-     * @param string $template
+     * @param  ZugferdDocument $document
+     * @param  string          $template
      * @return string
      */
     public function render(ZugferdDocument $document, string $template): string;

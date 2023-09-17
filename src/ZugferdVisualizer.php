@@ -76,7 +76,7 @@ class ZugferdVisualizer
     /**
      * Constructor
      *
-     * @param ZugferdDocument $document
+     * @param ZugferdDocument                              $document
      * @param ZugferdVisualizerMarkupRendererContract|null $renderer
      */
     public function __construct(ZugferdDocument $document, ?ZugferdVisualizerMarkupRendererContract $renderer = null)
@@ -91,7 +91,7 @@ class ZugferdVisualizer
     /**
      * Setup the renderer to use for generating markup
      *
-     * @param ZugferdVisualizerMarkupRendererContract $renderer
+     * @param  ZugferdVisualizerMarkupRendererContract $renderer
      * @return void
      */
     public function setRenderer(ZugferdVisualizerMarkupRendererContract $renderer): void
@@ -102,7 +102,7 @@ class ZugferdVisualizer
     /**
      * Set the template to use in the specified renderer
      *
-     * @param string $template
+     * @param  string $template
      * @return void
      */
     public function setTemplate(string $template): void
@@ -125,7 +125,7 @@ class ZugferdVisualizer
      * Add an additional directory where the PDF-Engine will
      * search for fonts
      *
-     * @param string $directory
+     * @param  string $directory
      * @return void
      */
     public function addPdfFontDirectory(string $directory): void
@@ -140,7 +140,7 @@ class ZugferdVisualizer
     /**
      * Sets the PDF default font
      *
-     * @param string $pdfFontDefault
+     * @param  string $pdfFontDefault
      * @return void
      */
     public function setPdfFontDefault(string $pdfFontDefault): void
@@ -184,7 +184,7 @@ class ZugferdVisualizer
     /**
      * Renders the PDF by markup (HTML) to a physical file
      *
-     * @param string $toFilename
+     * @param  string $toFilename
      * @return void
      */
     public function renderPdfFile(string $toFilename): void
@@ -264,12 +264,14 @@ class ZugferdVisualizer
         $defaultFontConfig = (new FontVariables())->getDefaults();
         $defaultFontData = $defaultFontConfig['fontdata'];
 
-        $pdf = new Mpdf([
+        $pdf = new Mpdf(
+            [
             'tempDir' => sys_get_temp_dir() . '/mpdf',
             'fontDir' => array_merge($defaultFontDirs, $this->pdfFontDirectories),
             'fontdata' => $defaultFontData + $this->pdfFontData,
             'default_font' => $this->pdfFontDefault,
-        ]);
+            ]
+        );
 
         return $pdf;
     }
