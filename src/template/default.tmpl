@@ -204,6 +204,7 @@
             </thead>
             <tbody>
                 <?php
+                if ($document->firstDocumentPosition()) {
                 $isfirstposition = true;
                 do {
                     $document->getDocumentPositionGenerals($lineid, $linestatuscode, $linestatusreasoncode);
@@ -228,6 +229,7 @@
                 </tr>
                 <?php $isfirstposition = false; ?>
                 <?php } while ($document->nextDocumentPosition()); ?>
+                <?php } ?>
                 <?php $document->getDocumentSummation($grandTotalAmount, $duePayableAmount, $lineTotalAmount, $chargeTotalAmount, $allowanceTotalAmount, $taxBasisTotalAmount, $taxTotalAmount, $roundingAmount, $totalPrepaidAmount); ?>
                 <tr>
                     <td colspan="6">&nbsp;</td>
