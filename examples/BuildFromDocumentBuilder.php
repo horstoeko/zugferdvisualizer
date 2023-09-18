@@ -63,6 +63,7 @@ $reader = ZugferdDocumentReader::readAndGuessFromContent($document->getContent()
 $visualizer = new ZugferdVisualizer($reader);
 $visualizer->setDefaultTemplate();
 $visualizer->setPdfFontDefault("courier");
+$visualizer->setPdfPaperSize('A4-P');
 
 // Merge XML and PDF
 

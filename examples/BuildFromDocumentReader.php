@@ -14,4 +14,5 @@ $document = ZugferdDocumentReader::readAndGuessFromFile(dirname(__FILE__) . "/in
 $visualizer = new ZugferdVisualizer($document);
 $visualizer->setDefaultTemplate();
 $visualizer->setPdfFontDefault("courier");
+$visualizer->setPdfPaperSize('A4-P');
 $visualizer->renderPdfFile(dirname(__FILE__) . "/invoice_1.pdf");

@@ -74,6 +74,14 @@ class ZugferdVisualizer
     protected $pdfFontDefault = "dejavusans";
 
     /**
+     * The PDF paper size
+     * Notation: <Format>-[P|L]
+     *
+     * @var string
+     */
+    protected $pdfPaperSize = "A4-P";
+
+    /**
      * Constructor
      *
      * @param ZugferdDocument                              $document
@@ -146,6 +154,19 @@ class ZugferdVisualizer
     public function setPdfFontDefault(string $pdfFontDefault): void
     {
         $this->pdfFontDefault = $pdfFontDefault;
+    }
+
+    /**
+     * Sets the PDF papersize
+     *
+     * @param string $pdfPaperSize
+     * @return void
+     */
+    public function setPdfPaperSize(string $pdfPaperSize): void
+    {
+        if (preg_match('/([0-9a-zA-Z]*)-([P,L])/i', $pdfPaperSize, $m)) {
+            $this->pdfPaperSize = $pdfPaperSize;
+        }
     }
 
     /**
@@ -270,6 +291,7 @@ class ZugferdVisualizer
             'fontDir' => array_merge($defaultFontDirs, $this->pdfFontDirectories),
             'fontdata' => $defaultFontData + $this->pdfFontData,
             'default_font' => $this->pdfFontDefault,
+            'format' => $this->pdfPaperSize,
             ]
         );
 
