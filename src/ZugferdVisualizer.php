@@ -9,8 +9,9 @@
 
 namespace horstoeko\zugferdvisualizer;
 
-use Dompdf\Dompdf;
-use Dompdf\Options;
+use Mpdf\Mpdf;
+use Mpdf\Config\FontVariables;
+use Mpdf\Config\ConfigVariables;
 use horstoeko\zugferd\ZugferdDocument;
 use horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer;
 use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract;
@@ -53,9 +54,17 @@ class ZugferdVisualizer
     /**
      * The directories where to search for additional fonts
      *
-     * @var string
+     * @var array
      */
-    protected $pdfFontDirectory = "";
+    protected $pdfFontDirectories = [];
+
+    /**
+     * The definitions for additional fonts
+     *
+     * @var array
+     * @see https://mpdf.github.io/fonts-languages/fonts-in-mpdf-7-x.html
+     */
+    protected $pdfFontData = [];
 
     /**
      * The PDF default font
@@ -63,14 +72,6 @@ class ZugferdVisualizer
      * @var string
      */
     protected $pdfFontDefault = "dejavusans";
-
-    /**
-     * The PDF paper size
-     *
-     * @var string
-     * @see \Dompdf\Adapter\CPDF::PAPER_SIZES for valid sizes
-     */
-    protected $pdfPaperSize = "a4";
 
     /**
      * Constructor
@@ -124,16 +125,16 @@ class ZugferdVisualizer
      * Add an additional directory where the PDF-Engine will
      * search for fonts
      *
-     * @param  string $fontDirectory
+     * @param  string $directory
      * @return void
      */
-    public function setPdfFontDirectory(string $fontDirectory): void
+    public function addPdfFontDirectory(string $directory): void
     {
-        if (!file_exists($fontDirectory)) {
+        if (!file_exists($directory)) {
             return;
         }
 
-        $this->pdfFontDirectory = $fontDirectory;
+        $this->pdfFontDirectories[] = $directory;
     }
 
     /**
@@ -145,17 +146,6 @@ class ZugferdVisualizer
     public function setPdfFontDefault(string $pdfFontDefault): void
     {
         $this->pdfFontDefault = $pdfFontDefault;
-    }
-
-    /**
-     * Set the default PDF paper size
-     *
-     * @param string $paperSize
-     * @return void
-     */
-    public function setPdfPaperSize(string $paperSize): void
-    {
-        $this->pdfPaperSize = $paperSize;
     }
 
     /**
@@ -186,9 +176,9 @@ class ZugferdVisualizer
         $markup = $this->renderMarkup();
 
         $pdf = $this->instanciatePdfEngine();
-        $pdf->loadHtml($markup);
+        $pdf->WriteHTML($markup);
 
-        return $pdf->output();
+        return $pdf->Output('dummy.pdf', 'S');
     }
 
     /**
@@ -202,12 +192,8 @@ class ZugferdVisualizer
         $markup = $this->renderMarkup();
 
         $pdf = $this->instanciatePdfEngine();
-        $pdf->loadHtml($markup);
-        $pdf->render();
-
-        $pdfContent = $pdf->output();
-
-        file_put_contents($toFilename, $pdfContent);
+        $pdf->WriteHTML($markup);
+        $pdf->Output($toFilename, 'F');
     }
 
     /**
@@ -268,16 +254,24 @@ class ZugferdVisualizer
     /**
      * Returns a new instance of the PDF-Engine (MPDF)
      *
-     * @return Dompdf
+     * @return Mpdf
      */
-    private function instanciatePdfEngine(): Dompdf
+    private function instanciatePdfEngine(): Mpdf
     {
-        $pdfOptions = new Options();
-        $pdfOptions->setTempDir(sys_get_temp_dir() . '/dompdf');
-        $pdfOptions->setDefaultFont($this->pdfFontDefault);
-        $pdfOptions->setDefaultPaperSize($this->pdfPaperSize);
+        $defaultConfig = (new ConfigVariables())->getDefaults();
+        $defaultFontDirs = $defaultConfig['fontDir'];
 
-        $pdf = new Dompdf($pdfOptions);
+        $defaultFontConfig = (new FontVariables())->getDefaults();
+        $defaultFontData = $defaultFontConfig['fontdata'];
+
+        $pdf = new Mpdf(
+            [
+            'tempDir' => sys_get_temp_dir() . '/mpdf',
+            'fontDir' => array_merge($defaultFontDirs, $this->pdfFontDirectories),
+            'fontdata' => $defaultFontData + $this->pdfFontData,
+            'default_font' => $this->pdfFontDefault,
+            ]
+        );
 
         return $pdf;
     }

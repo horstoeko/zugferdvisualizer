@@ -33,7 +33,8 @@
         "ext-mbstring": "*",
         "dompdf/dompdf": "^2.0",
         "horstoeko/zugferd": "^1",
-        "league/commonmark": "^1|^2"
+        "league/commonmark": "^1|^2",
+        "mpdf/mpdf": "^8"
     },
     "require-dev": {
         "ext-gd": "*",

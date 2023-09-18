@@ -32,7 +32,7 @@ With `horstoeko/zugferdvisualizer` you can visualize ZUGFeRD/XRechnung/Factur-X 
 This package makes use of
 
 - [horstoeko/zugferd](https://github.com/horstoeko/zugferd)
-- [DomPdf](https://github.com/dompdf/dompdf)
+- [mPdf](https://github.com/mpdf/mpdf)
 
 ## Installation
 
