@@ -170,6 +170,8 @@ echo $visualizer->renderMarkup();
 
 ### Use the built-in Laravel renderer
 
+The ```ZugferdVisualizerLaravelRenderer``` can be used within the Laravel-Framework:
+
 ```php
 namespace App\Http\Controllers;
 
