@@ -16,6 +16,7 @@
     - [Create HTML markup from existing invoice document (XML) using built-in template](#create-html-markup-from-existing-invoice-document-xml-using-built-in-template)
     - [Create a PDF file from existing invoice document (XML) using built-in template](#create-a-pdf-file-from-existing-invoice-document-xml-using-built-in-template)
     - [Create a PDF string from existing invoice document (XML) using built-in template](#create-a-pdf-string-from-existing-invoice-document-xml-using-built-in-template)
+    - [Create a PDF string from document builder and merge XML with generated PDF](#create-a-pdf-string-from-document-builder-and-merge-xml-with-generated-pdf)
     - [Create a custom renderer](#create-a-custom-renderer)
     - [Use a custom renderer](#use-a-custom-renderer)
 
@@ -68,6 +69,8 @@ echo $visualizer->renderMarkup();
 
 ### Create a PDF file from existing invoice document (XML) using built-in template
 
+Find there [full example here](https://github.com/horstoeko/zugferdvisualizer/blob/master/examples/BuildFromDocumentReader.php)
+
 ```php
 use horstoeko\zugferd\ZugferdDocumentReader;
 use horstoeko\zugferdvisualizer\ZugferdVisualizer;
@@ -97,6 +100,28 @@ $visualizer->setDefaultTemplate();
 $visualizer->setPdfFontDefault("courier");
 
 $pdfString = $visualizer->renderPdf();
+```
+
+### Create a PDF string from document builder and merge XML with generated PDF
+
+Find there [full example here](https://github.com/horstoeko/zugferdvisualizer/blob/master/examples/BuildFromDocumentBuilder.php)
+
+```php
+$document = ZugferdDocumentBuilder::CreateNew(ZugferdProfiles::PROFILE_EN16931);
+$document
+    ->setDocumentInformation("471102", "380", \DateTime::createFromFormat("Ymd", "20180305"), "EUR")
+    ->...
+
+$reader = ZugferdDocumentReader::readAndGuessFromContent($document->getContent());
+
+$visualizer = new ZugferdVisualizer($reader);
+$visualizer->setDefaultTemplate();
+$visualizer->setPdfFontDefault("courier");
+$visualizer->setPdfPaperSize('A4-P');
+
+$merger = new ZugferdDocumentPdfMerger($document->getContent(), $visualizer->renderPdf());
+$merger->generateDocument();
+$merger->saveDocument(dirname(__FILE__) . "/invoice_2.pdf");
 ```
 
 ### Create a custom renderer
