@@ -295,6 +295,8 @@ class ZugferdVisualizer
             'fontdata' => $defaultFontData + $this->pdfFontData,
             'default_font' => $this->pdfFontDefault,
             'format' => $this->pdfPaperSize,
+            'PDFA' => true,
+            'PDFAauto' => true,
             ]
         );
 
