@@ -192,5 +192,22 @@ class ZugferdController extends Controller
 
         return $visualizer->renderMarkup();
     }
+
+    public function download(Request $request)
+    {
+        $document = ZugferdDocumentReader::readAndGuessFromFile(storage_path('app/invoice_1.xml'));
+
+        $visualizer = new ZugferdVisualizer($document);
+        $visualizer->setDefaultTemplate();
+        $visualizer->setPdfFontDefault("courier");
+        $visualizer->setPdfPaperSize('A4-P');
+        $visualizer->renderPdfFile(storage_path('app/invoice_1.pdf'));
+
+        $headers = [
+            'Content-Type: application/pdf',
+        ];
+
+        return response()->download(storage_path('app/invoice_1.pdf'), "invoice_1.pdf", $headers);
+    }
 }
 ```
