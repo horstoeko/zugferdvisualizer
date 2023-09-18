@@ -19,6 +19,7 @@
     - [Create a PDF string from document builder and merge XML with generated PDF](#create-a-pdf-string-from-document-builder-and-merge-xml-with-generated-pdf)
     - [Create a custom renderer](#create-a-custom-renderer)
     - [Use a custom renderer](#use-a-custom-renderer)
+    - [Use the built-in Laravel renderer](#use-the-built-in-laravel-renderer)
 
 ## License
 
@@ -165,4 +166,31 @@ $visualizer->setRenderer(new MyOwnRenderer());
 $visualizer->setTemplate('/assets/myowntemplate.tmpl');
 
 echo $visualizer->renderMarkup();
+```
+
+### Use the built-in Laravel renderer
+
+```php
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use horstoeko\zugferd\ZugferdDocumentReader;
+use horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerLaravelRenderer;
+use horstoeko\zugferdvisualizer\ZugferdVisualizer;
+
+class ZugferdController extends Controller
+{
+    public function index(Request $request)
+    {
+        $document = ZugferdDocumentReader::readAndGuessFromFile(storage_path('app/invoice_1.xml'));
+
+        $visualizer = new ZugferdVisualizer($document);
+        $visualizer->setRenderer(app(ZugferdVisualizerLaravelRenderer::class));
+        $visualizer->setTemplate('zugferd'); // ~/resources/views/zugferd.blade.php
+        $visualizer->setPdfFontDefault("courier");
+        $visualizer->setPdfPaperSize('A4-P');
+
+        return $visualizer->renderMarkup();
+    }
+}
 ```
