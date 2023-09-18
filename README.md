@@ -189,8 +189,6 @@ class ZugferdController extends Controller
         $visualizer = new ZugferdVisualizer($document);
         $visualizer->setRenderer(app(ZugferdVisualizerLaravelRenderer::class));
         $visualizer->setTemplate('zugferd'); // ~/resources/views/zugferd.blade.php
-        $visualizer->setPdfFontDefault("courier");
-        $visualizer->setPdfPaperSize('A4-P');
 
         return $visualizer->renderMarkup();
     }
