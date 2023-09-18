@@ -32,6 +32,9 @@ class ZugferdVisualizerLaravelRenderer implements ZugferdVisualizerMarkupRendere
             return false;
         }
 
+        /**
+         * @var \Illuminate\Contracts\View\Factory
+         */
         $view = call_user_func_array("view", []);
 
         return $view->exists($template);
@@ -46,6 +49,9 @@ class ZugferdVisualizerLaravelRenderer implements ZugferdVisualizerMarkupRendere
             return "";
         }
 
+        /**
+         * @var \Illuminate\Contracts\View\View
+         */
         $view = call_user_func_array("view", [$template, ["document" => $document]]);
 
         return $view->render();
