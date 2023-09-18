@@ -198,7 +198,8 @@ class ZugferdController extends Controller
         $document = ZugferdDocumentReader::readAndGuessFromFile(storage_path('app/invoice_1.xml'));
 
         $visualizer = new ZugferdVisualizer($document);
-        $visualizer->setDefaultTemplate();
+        $visualizer->setRenderer(app(ZugferdVisualizerLaravelRenderer::class));
+        $visualizer->setTemplate('zugferd');
         $visualizer->setPdfFontDefault("courier");
         $visualizer->setPdfPaperSize('A4-P');
         $visualizer->renderPdfFile(storage_path('app/invoice_1.pdf'));
