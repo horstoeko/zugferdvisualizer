@@ -55,6 +55,7 @@ class ZugferdVisualizer
      * The directories where to search for additional fonts
      *
      * @var array
+     * @see https://mpdf.github.io/fonts-languages/fonts-in-mpdf-7-x.html
      */
     protected $pdfFontDirectories = [];
 
@@ -70,6 +71,7 @@ class ZugferdVisualizer
      * The PDF default font
      *
      * @var string
+     * @see https://mpdf.github.io/fonts-languages/default-font.html
      */
     protected $pdfFontDefault = "dejavusans";
 
@@ -78,6 +80,7 @@ class ZugferdVisualizer
      * Notation: <Format>-[P|L]
      *
      * @var string
+     * @see https://mpdf.github.io/paging/page-size-orientation.html
      */
     protected $pdfPaperSize = "A4-P";
 
