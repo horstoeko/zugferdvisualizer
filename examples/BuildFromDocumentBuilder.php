@@ -2,7 +2,6 @@
 
 use horstoeko\zugferd\ZugferdProfiles;
 use horstoeko\zugferd\ZugferdDocumentBuilder;
-use horstoeko\zugferd\ZugferdDocumentPdfBuilder;
 use horstoeko\zugferdvisualizer\ZugferdVisualizer;
 use horstoeko\zugferd\codelists\ZugferdPaymentMeans;
 use horstoeko\zugferd\ZugferdDocumentPdfMerger;

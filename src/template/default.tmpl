@@ -20,6 +20,9 @@
                 margin: 0;
                 padding: 0;
             }
+            th, td {
+                vertical-align: top;
+            }
             th {
                 margin-left: 0;
                 margin-right: 0;
@@ -119,6 +122,9 @@
             .bold {
                 font-weight: bold;
             }
+            .italic {
+                font-style: italic;
+            }
             .red {
                 color: #ff0000;
             }
@@ -164,6 +170,9 @@
             .fs-14 {
                 font-size: 14pt;
             }
+            .pb-0 {
+                padding-bottom: 0px;
+            }
         </style>
     </head>
     <body>
@@ -185,12 +194,18 @@
         <p style="margin: 0; padding: 0">
             Invoice Date <?php echo $documentdate->format("d.m.Y"); ?>
         </p>
-        <p style="margin-top: 50px">
+        <p style="margin-top: 50px" class="bold">
             Dear customer,
         </p>
         <p>
             We take the liberty of invoicing you for the following items
         </p>
+        <?php $document->getDocumentNotes($documentNotes); ?>
+        <?php foreach ($documentNotes as $documentNote) { ?>
+        <p class="pb-0">
+        <?php echo trim(nl2br($documentNote['content'])); ?>
+        </p>
+        <?php } ?>
         <table class="postable">
             <thead>
                 <tr>
@@ -214,6 +229,15 @@
                     $document->getDocumentPositionLineSummation($lineTotalAmount, $totalAllowanceChargeAmount);
                     $document->getDocumentPositionQuantity($billedquantity, $billedquantityunitcode, $chargeFreeQuantity, $chargeFreeQuantityunitcode, $packageQuantity, $packageQuantityunitcode);
                 ?>
+                <?php if ($document->firstDocumentPositionNote()) { ?>
+                    <tr>
+                        <td class="<?php echo $isfirstposition ? ' space' : '' ?>">&nbsp;</td>
+                        <td colspan="5" class="<?php echo $isfirstposition ? ' space' : '' ?>">
+                            <?php $document->getDocumentPositionNote($posnoteContent, $posnoteContentCode, $posnoteSubjectCode); ?>
+                            <?php echo $posnoteContent; ?>
+                        </td>
+                    </tr>
+                <?php } while ($document->nextDocumentPositionNote()); ?>
                 <tr>
                     <td class="posno<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $lineid; ?></td>
                     <td class="posdesc<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $prodname; ?></td>
@@ -227,9 +251,50 @@
                         <td class="poslinevat<?php echo $isfirstposition ? ' space' : '' ?>">&nbsp;</td>
                     <?php } ?>
                 </tr>
+                <?php if ($document->firstDocumentPositionGrossPriceAllowanceCharge()) { ?>
+                    <?php do { ?>
+                    <?php $document->getDocumentPositionGrossPrice($grossAmount, $grossBasisQuantity, $grossBasisQuantityUnitCode); ?>
+                    <?php $document->getDocumentPositionGrossPriceAllowanceCharge($actualAmount, $isCharge, $calculationPercent, $basisAmount, $reason, $taxTypeCode, $taxCategoryCode, $rateApplicablePercent, $sequence, $basisQuantity, $basisQuantityUnitCode, $reasonCode); ?>
+                    <tr>
+                        <td class="posno">&nbsp;</td>
+                        <td class="posdesc bold italic"><?php echo ($isCharge ? "Charge" : "Allowance") ?></td>
+                        <td class="posqty">&nbsp;</td>
+                        <td class="posunitprice italic"><?php echo number_format($actualAmount, 2); ?> (<?php echo number_format($grossAmount, 2); ?>) <?php echo $invoiceCurrency; ?></td>
+                    </tr>
+                    <?php } while ($document->nextDocumentPositionGrossPriceAllowanceCharge()); ?>
+                <?php } ?>
                 <?php $isfirstposition = false; ?>
                 <?php } while ($document->nextDocumentPosition()); ?>
                 <?php } ?>
+
+                <!--
+                    Allowance/Charge
+                -->
+
+                <?php if ($document->firstDocumentAllowanceCharge()) { ?>
+                <tr>
+                    <td colspan="6">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="3">&nbsp;</td>
+                    <td colspan="3" class="bold fs-11 space">Allowance/Charge</td>
+                </tr>
+                <?php $isFirstDocumentAllowanceCharge = true; ?>
+                <?php do { ?>
+                <?php $document->getDocumentAllowanceCharge($actualAmount, $isCharge, $taxCategoryCode, $taxTypeCode, $rateApplicablePercent, $sequence, $calculationPercent, $basisAmount, $basisQuantity, $basisQuantityUnitCode, $reasonCode, $reason); ?>
+                <tr>
+                <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?>" colspan="3">&nbsp;</td>
+                <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalname" colspan="2"><?php echo $reason ? $reason : ($isCharge ? "Charge" : "Allowance"); ?></td>
+                <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalvalue"><?php echo number_format($actualAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
+                </tr>
+                <?php $isFirstDocumentAllowanceCharge = false; ?>
+                <?php } while ($document->nextDocumentAllowanceCharge()); ?>
+                <?php } ?>
+
+                <!--
+                    Summmation
+                -->
+
                 <?php $document->getDocumentSummation($grandTotalAmount, $duePayableAmount, $lineTotalAmount, $chargeTotalAmount, $allowanceTotalAmount, $taxBasisTotalAmount, $taxTotalAmount, $roundingAmount, $totalPrepaidAmount); ?>
                 <tr>
                     <td colspan="6">&nbsp;</td>
@@ -277,6 +342,11 @@
                     <td class="totalname bold" colspan="2">Amount to pay</td>
                     <td class="totalvalue bold"><?php echo number_format($duePayableAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
+
+                <!--
+                    VAT Summation
+                -->
+
                 <?php if($document->firstDocumentTax()) { ?>
                 <tr>
                     <td colspan="6">&nbsp;</td>
@@ -295,6 +365,23 @@
                 </tr>
                 <?php $isfirsttax = false ?>
                 <?php } while ($document->nextDocumentTax()); ?>
+                <?php } ?>
+
+                <!--
+                    Paymentterms
+                -->
+
+                <?php if ($document->firstDocumentPaymentTerms()) { ?>
+                <?php $isfirstpaymentterm = true ?>
+                <?php do { ?>
+                <tr>
+                    <?php $document->getDocumentPaymentTerm($description, $dueDate, $directDebitMandateID); ?>
+                    <td colspan="6" class="<?php echo $isfirstpaymentterm ? 'space' : '' ?>">
+                        <?php echo $description; ?>
+                    </td>
+                </tr>
+                <?php $isfirstpaymentterm = false ?>
+                <?php } while ($document->nextDocumentPaymentTerms()); ?>
                 <?php } ?>
             </tbody>
         </table>
