@@ -37,7 +37,7 @@
                 width: 100%;
                 min-width: 100%;
                 max-width: 100%;
-                margin-top: 15px;
+                margin-top: 5px;
             }
             table.postable th {
                 padding-bottom: 10px;
@@ -200,12 +200,12 @@
         <p>
             We take the liberty of invoicing you for the following items
         </p>
-        <?php $document->getDocumentNotes($documentNotes); ?>
-        <?php foreach ($documentNotes as $documentNote) { ?>
-        <p class="pb-0">
-        <?php echo trim(nl2br($documentNote['content'])); ?>
-        </p>
-        <?php } ?>
+        <?php //$document->getDocumentNotes($documentNotes); ?>
+        <?php //foreach ($documentNotes as $documentNote) { ?>
+        <!--<p class="pb-0">-->
+        <?php //echo trim(nl2br($documentNote['content'])); ?>
+        <!--</p>-->
+        <?php //} ?>
         <table class="postable">
             <thead>
                 <tr>
