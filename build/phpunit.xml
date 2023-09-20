@@ -3,6 +3,7 @@
     <testsuites>
         <testsuite name="Basic">
             <file>../tests/testcases/BasicTest.php</file>
+            <file>../tests/testcases/VisualizerText.php</file>
         </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">

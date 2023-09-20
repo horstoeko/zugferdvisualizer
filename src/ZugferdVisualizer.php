@@ -183,7 +183,6 @@ class ZugferdVisualizer
     public function renderMarkup(): string
     {
         $this->testMustUseDefaultRenderer();
-        $this->testRendererIsSet();
         $this->testTemplateIsSet();
         $this->testTemplateExists();
 
@@ -230,20 +229,6 @@ class ZugferdVisualizer
     {
         if (!$this->renderer) {
             $this->setRenderer(new ZugferdVisualizerDefaultRenderer());
-        }
-    }
-
-    /**
-     * Check if a renderer is defined. If no one is set then an exception
-     * is raised
-     *
-     * @return void
-     * @throws ZugferdVisualizerNoRendererDefinedException
-     */
-    private function testRendererIsSet(): void
-    {
-        if (!$this->renderer) {
-            throw new ZugferdVisualizerNoRendererDefinedException();
         }
     }
 
