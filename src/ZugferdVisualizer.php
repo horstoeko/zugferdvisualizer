@@ -15,7 +15,6 @@ use Mpdf\Config\ConfigVariables;
 use horstoeko\zugferd\ZugferdDocument;
 use horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer;
 use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract;
-use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoRendererDefinedException;
 use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateDefinedException;
 use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateNotExistsException;
 
@@ -176,7 +175,6 @@ class ZugferdVisualizer
      * Renders the markup (HTML)
      *
      * @return string
-     * @throws ZugferdVisualizerNoRendererDefinedException
      * @throws ZugferdVisualizerNoTemplateDefinedException
      * @throws ZugferdVisualizerNoTemplateNotExistsException
      */
