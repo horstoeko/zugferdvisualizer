@@ -241,6 +241,7 @@
                         <td colspan="5" class="<?php echo $isfirstposition ? ' space' : '' ?>">
                             <?php $document->getDocumentPositionNote($posnoteContent, $posnoteContentCode, $posnoteSubjectCode); ?>
                             <?php echo $posnoteContent; ?>
+                            <?php $isfirstposition = false; ?>
                         </td>
                     </tr>
                 <?php } while ($document->nextDocumentPositionNote()); ?>
