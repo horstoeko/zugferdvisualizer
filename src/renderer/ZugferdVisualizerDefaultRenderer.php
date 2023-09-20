@@ -40,10 +40,6 @@ class ZugferdVisualizerDefaultRenderer implements ZugferdVisualizerMarkupRendere
         include $template;
         $markup = ob_get_clean();
 
-        if (false === $markup) {
-            throw new \RuntimeException("Failed to render markup");
-        }
-
         return $markup;
     }
 }

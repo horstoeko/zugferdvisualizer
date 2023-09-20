@@ -11,6 +11,9 @@
             <directory suffix=".php">../src</directory>
         </include>
         <exclude>
+            <directory suffix=".php">../src/contracts</directory>
+            <directory suffix=".php">../src/exception</directory>
+            <file>../src/renderer/ZugferdVisualizerLaravelRenderer.php</file>
         </exclude>
         <report>
             <xml outputDirectory="coverage"/>

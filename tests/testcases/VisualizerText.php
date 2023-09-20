@@ -191,6 +191,7 @@ class VisualizerText extends TestCase
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testMustUseDefaultRenderer
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateIsSet
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateExists
+     * @covers \horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer::templateExists
      */
     public function testRenderMarkupTemplateNotExists(): void
     {
@@ -208,6 +209,7 @@ class VisualizerText extends TestCase
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testMustUseDefaultRenderer
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateIsSet
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateExists
+     * @covers \horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer::render
      */
     public function testRenderMarkupWithDefaultTemplate(): void
     {
@@ -258,6 +260,7 @@ class VisualizerText extends TestCase
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testMustUseDefaultRenderer
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateIsSet
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateExists
+     * @covers \horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer::templateExists
      */
     public function testRenderPdfTemplateNotExists(): void
     {
@@ -277,6 +280,7 @@ class VisualizerText extends TestCase
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateIsSet
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateExists
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::instanciatePdfEngine
+     * @covers \horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer::render
      */
     public function testRenderPdfWithDefaultTemplate(): void
     {
@@ -297,6 +301,7 @@ class VisualizerText extends TestCase
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateIsSet
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateExists
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::instanciatePdfEngine
+     * @covers \horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer::render
      */
     public function testRenderPdfFileWithDefaultTemplate(): void
     {
