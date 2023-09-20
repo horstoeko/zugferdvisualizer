@@ -290,8 +290,9 @@
                 <?php $document->getDocumentAllowanceCharge($actualAmount, $isCharge, $taxCategoryCode, $taxTypeCode, $rateApplicablePercent, $sequence, $calculationPercent, $basisAmount, $basisQuantity, $basisQuantityUnitCode, $reasonCode, $reason); ?>
                 <tr>
                 <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?>" colspan="3">&nbsp;</td>
-                <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalname" colspan="2"><?php echo $reason ? $reason : ($isCharge ? "Charge" : "Allowance"); ?></td>
-                <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalvalue"><?php echo number_format($actualAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
+                <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalname"><?php echo $reason ? $reason : ($isCharge ? "Charge" : "Allowance"); ?></td>
+                <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalvalue"><?php echo number_format($basisAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
+                <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalvalue bold"><?php echo number_format($actualAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <?php $isFirstDocumentAllowanceCharge = false; ?>
                 <?php } while ($document->nextDocumentAllowanceCharge()); ?>
@@ -359,22 +360,26 @@
                 </tr>
                 <tr>
                     <td colspan="3">&nbsp;</td>
-                    <td colspan="3" class="bold fs-11">VAT</td>
+                    <td colspan="3" class="bold fs-11">VAT Breakdown</td>
                 </tr>
                 <?php $isfirsttax = true ?>
+                <?php $sumbasisamount = 0.0 ?>
                 <?php do { ?>
                 <?php $document->getDocumentTax($categoryCode, $typeCode, $basisAmount, $calculatedAmount, $rateApplicablePercent, $exemptionReason, $exemptionReasonCode, $lineTotalBasisAmount, $allowanceChargeBasisAmount, $taxPointDate, $dueDateTypeCode); ?>
                 <tr>
                     <td class="<?php echo $isfirsttax ? 'space' : '' ?>" colspan="3">&nbsp;</td>
-                    <td class="totalname<?php echo $isfirsttax ? ' space' : '' ?>" colspan="2"><?php echo number_format($rateApplicablePercent, 2); ?>% of <?php echo number_format($basisAmount,2) ?> <?php echo $invoiceCurrency; ?></td>
-                    <td class="totalvalue<?php echo $isfirsttax ? ' space' : '' ?>"><?php echo number_format($calculatedAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
+                    <td class="totalname<?php echo $isfirsttax ? ' space' : '' ?>"><?php echo number_format($rateApplicablePercent, 2); ?>%</td>
+                    <td class="totalvalue<?php echo $isfirsttax ? ' space' : '' ?>"><?php echo number_format($basisAmount,2) ?> <?php echo $invoiceCurrency; ?></td>
+                    <td class="totalvalue bold<?php echo $isfirsttax ? ' space' : '' ?>"><?php echo number_format($calculatedAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
+                <?php $sumbasisamount = $sumbasisamount + $basisAmount ?>
                 <?php $isfirsttax = false ?>
                 <?php } while ($document->nextDocumentTax()); ?>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname" colspan="2">Total</td>
-                    <td class="totalvalue"><?php echo number_format($taxTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
+                    <td class="totalname">Total</td>
+                    <td class="totalvalue"><?php echo number_format($sumbasisamount, 2); ?> <?php echo $invoiceCurrency; ?></td>
+                    <td class="totalvalue bold"><?php echo number_format($taxTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <?php } ?>
 
