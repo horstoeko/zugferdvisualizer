@@ -119,6 +119,12 @@
             .space {
                 padding-top: 10px;
             }
+            .space2 {
+                padding-top: 20px;
+            }
+            .space3 {
+                padding-top: 30px;
+            }
             .bold {
                 font-weight: bold;
             }
@@ -365,6 +371,11 @@
                 </tr>
                 <?php $isfirsttax = false ?>
                 <?php } while ($document->nextDocumentTax()); ?>
+                <tr>
+                    <td class="" colspan="3">&nbsp;</td>
+                    <td class="totalname" colspan="2">Total</td>
+                    <td class="totalvalue"><?php echo number_format($taxTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
+                </tr>
                 <?php } ?>
 
                 <!--
@@ -376,7 +387,7 @@
                 <?php do { ?>
                 <tr>
                     <?php $document->getDocumentPaymentTerm($description, $dueDate, $directDebitMandateID); ?>
-                    <td colspan="6" class="<?php echo $isfirstpaymentterm ? 'space' : '' ?>">
+                    <td colspan="6" class="<?php echo $isfirstpaymentterm ? 'space3' : '' ?>">
                         <?php echo $description; ?>
                     </td>
                 </tr>
