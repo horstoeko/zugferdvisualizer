@@ -168,13 +168,6 @@ class VisualizerText extends TestCase
         $this->expectException(ZugferdVisualizerNoTemplateDefinedException::class);
 
         $visualizer->renderMarkup();
-
-        $visualizer->setDefaultTemplate();
-
-        $markup = $visualizer->renderMarkup();
-
-        $this->assertNotEmpty($markup);
-        $this->assertStringStartsWith('<html>', $markup);
     }
 
     /**
@@ -208,5 +201,114 @@ class VisualizerText extends TestCase
         $this->expectException(ZugferdVisualizerNoTemplateNotExistsException::class);
 
         $visualizer->renderMarkup();
+    }
+
+    /**
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderMarkup
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testMustUseDefaultRenderer
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateIsSet
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateExists
+     */
+    public function testRenderMarkupWithDefaultTemplate(): void
+    {
+        $visualizer = new ZugferdVisualizer(static::$document);
+        $visualizer->setDefaultTemplate();
+
+        $markup = $visualizer->renderMarkup();
+
+        $this->assertStringContainsString("<html>", $markup);
+    }
+
+    /**
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderMarkup
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderPdf
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testMustUseDefaultRenderer
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateIsSet
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateExists
+     */
+    public function testRenderPdf(): void
+    {
+        $visualizer = new ZugferdVisualizer(static::$document);
+
+        $this->expectException(ZugferdVisualizerNoTemplateDefinedException::class);
+
+        $visualizer->renderPdf();
+    }
+
+    /**
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderMarkup
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderPdf
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testMustUseDefaultRenderer
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateIsSet
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateExists
+     */
+    public function testRenderPdfTemplateNotSet(): void
+    {
+        $visualizer = new ZugferdVisualizer(static::$document);
+        $visualizer->setRenderer(new ZugferdVisualizerDefaultRenderer());
+
+        $this->expectException(ZugferdVisualizerNoTemplateDefinedException::class);
+
+        $visualizer->renderPdf();
+    }
+
+    /**
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderMarkup
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderPdf
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testMustUseDefaultRenderer
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateIsSet
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateExists
+     */
+    public function testRenderPdfTemplateNotExists(): void
+    {
+        $visualizer = new ZugferdVisualizer(static::$document);
+        $visualizer->setRenderer(new ZugferdVisualizerDefaultRenderer());
+        $visualizer->setTemplate('/invalidpath/invalidfile.tmpl');
+
+        $this->expectException(ZugferdVisualizerNoTemplateNotExistsException::class);
+
+        $visualizer->renderPdf();
+    }
+
+    /**
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderMarkup
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderPdf
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testMustUseDefaultRenderer
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateIsSet
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateExists
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::instanciatePdfEngine
+     */
+    public function testRenderPdfWithDefaultTemplate(): void
+    {
+        $visualizer = new ZugferdVisualizer(static::$document);
+        $visualizer->setDefaultTemplate();
+
+        $pdf = $visualizer->renderPdf();
+
+        $this->assertNotEmpty($pdf);
+        $this->assertStringStartsWith('%PDF-1.4', $pdf);
+    }
+
+    /**
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderMarkup
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderPdf
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderPdfFile
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testMustUseDefaultRenderer
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateIsSet
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateExists
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::instanciatePdfEngine
+     */
+    public function testRenderPdfFileWithDefaultTemplate(): void
+    {
+        $visualizer = new ZugferdVisualizer(static::$document);
+        $visualizer->setDefaultTemplate();
+
+        $toFilename = dirname(__FILE__) . "/invoice.pdf";
+
+        $this->registerFileForTestMethodTeardown($toFilename);
+
+        $visualizer->renderPdfFile($toFilename);
+
+        $this->assertTrue(file_exists($toFilename));
     }
 }
