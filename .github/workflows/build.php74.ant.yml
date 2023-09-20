@@ -30,3 +30,8 @@ jobs:
         if: always()
         with:
             files: "./build/logs/junit.xml"
+      - name: Publish Test Coverage Report
+        uses: danhunsaker/clover-reporter-action@v0.2.17-clover
+        with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            clover-file: "./build/logs/clover.xml"
