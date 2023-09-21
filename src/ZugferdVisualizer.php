@@ -9,14 +9,14 @@
 
 namespace horstoeko\zugferdvisualizer;
 
-use Mpdf\Mpdf;
-use Mpdf\Config\FontVariables;
-use Mpdf\Config\ConfigVariables;
-use horstoeko\zugferd\ZugferdDocument;
-use horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer;
+use horstoeko\zugferd\ZugferdDocumentReader;
 use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract;
 use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateDefinedException;
 use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateNotExistsException;
+use horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
+use Mpdf\Mpdf;
 
 /**
  * Class representing the main visualizer class
@@ -32,9 +32,9 @@ class ZugferdVisualizer
     /**
      * The zugferd document
      *
-     * @var \horstoeko\zugferd\ZugferdDocument
+     * @var \horstoeko\zugferd\ZugferdDocumentReader
      */
-    protected $document = null;
+    protected $documentReader = null;
 
     /**
      * The renderer to use
@@ -86,12 +86,12 @@ class ZugferdVisualizer
     /**
      * Constructor
      *
-     * @param ZugferdDocument                              $document
+     * @param ZugferdDocumentReader                        $documentReader
      * @param ZugferdVisualizerMarkupRendererContract|null $renderer
      */
-    public function __construct(ZugferdDocument $document, ?ZugferdVisualizerMarkupRendererContract $renderer = null)
+    public function __construct(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null)
     {
-        $this->document = $document;
+        $this->documentReader = $documentReader;
 
         if ($renderer) {
             $this->setRenderer($renderer);
@@ -161,7 +161,7 @@ class ZugferdVisualizer
     /**
      * Sets the PDF papersize
      *
-     * @param string $pdfPaperSize
+     * @param  string $pdfPaperSize
      * @return void
      */
     public function setPdfPaperSize(string $pdfPaperSize): void
@@ -184,7 +184,7 @@ class ZugferdVisualizer
         $this->testTemplateIsSet();
         $this->testTemplateExists();
 
-        return $this->renderer->render($this->document, $this->template);
+        return $this->renderer->render($this->documentReader, $this->template);
     }
 
     /**

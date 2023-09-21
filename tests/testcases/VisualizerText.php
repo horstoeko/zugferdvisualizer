@@ -3,11 +3,11 @@
 namespace horstoeko\zugferdvisualizer\tests\testcases;
 
 use horstoeko\zugferd\ZugferdDocumentReader;
-use horstoeko\zugferdvisualizer\tests\TestCase;
-use horstoeko\zugferdvisualizer\ZugferdVisualizer;
-use horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer;
 use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateDefinedException;
 use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateNotExistsException;
+use horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer;
+use horstoeko\zugferdvisualizer\tests\TestCase;
+use horstoeko\zugferdvisualizer\ZugferdVisualizer;
 
 class VisualizerText extends TestCase
 {
