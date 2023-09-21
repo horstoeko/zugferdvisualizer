@@ -28,7 +28,7 @@ class VisualizerText extends TestCase
     {
         $visualizer = new ZugferdVisualizer(static::$document);
 
-        $this->assertNotNull($this->getPrivatePropertyFromObject($visualizer, 'document')->getValue($visualizer));
+        $this->assertNotNull($this->getPrivatePropertyFromObject($visualizer, 'documentReader')->getValue($visualizer));
         $this->assertNull($this->getPrivatePropertyFromObject($visualizer, 'renderer')->getValue($visualizer));
         $this->assertEmpty($this->getPrivatePropertyFromObject($visualizer, 'template')->getValue($visualizer));
         $this->assertEmpty($this->getPrivatePropertyFromObject($visualizer, 'pdfFontDirectories')->getValue($visualizer));
@@ -44,7 +44,7 @@ class VisualizerText extends TestCase
     {
         $visualizer = new ZugferdVisualizer(static::$document, new ZugferdVisualizerDefaultRenderer());
 
-        $this->assertNotNull($this->getPrivatePropertyFromObject($visualizer, 'document')->getValue($visualizer));
+        $this->assertNotNull($this->getPrivatePropertyFromObject($visualizer, 'documentReader')->getValue($visualizer));
         $this->assertNotNull($this->getPrivatePropertyFromObject($visualizer, 'renderer')->getValue($visualizer));
         $this->assertInstanceOf(ZugferdVisualizerDefaultRenderer::class, $this->getPrivatePropertyFromObject($visualizer, 'renderer')->getValue($visualizer));
         $this->assertEmpty($this->getPrivatePropertyFromObject($visualizer, 'template')->getValue($visualizer));
