@@ -8,6 +8,7 @@ use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateNotExistsEx
 use horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer;
 use horstoeko\zugferdvisualizer\tests\TestCase;
 use horstoeko\zugferdvisualizer\ZugferdVisualizer;
+use Mpdf\Mpdf;
 
 class VisualizerText extends TestCase
 {
@@ -315,5 +316,40 @@ class VisualizerText extends TestCase
         $visualizer->renderPdfFile($toFilename);
 
         $this->assertTrue(file_exists($toFilename));
+    }
+
+    /**
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::setPdfInitCallback
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderMarkup
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderPdf
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderPdfFile
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testMustUseDefaultRenderer
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateIsSet
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::testTemplateExists
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::instanciatePdfEngine
+     * @covers \horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer::render
+     */
+    public function testPdfInitCallback(): void
+    {
+        $oldPdfVersion = "";
+        $newPdfVersion = "";
+
+        $visualizer = new ZugferdVisualizer(static::$document);
+        $visualizer->setDefaultTemplate();
+        $visualizer->setPdfInitCallback(function (Mpdf $mpdf, ZugferdVisualizer $visualizer) use (&$oldPdfVersion, &$newPdfVersion) {
+            $oldPdfVersion = $mpdf->pdf_version;
+            $mpdf->pdf_version = "1.7";
+            $newPdfVersion = $mpdf->pdf_version;
+        });
+
+        $toFilename = dirname(__FILE__) . "/invoice.pdf";
+
+        $this->registerFileForTestMethodTeardown($toFilename);
+
+        $visualizer->renderPdfFile($toFilename);
+
+        $this->assertTrue(file_exists($toFilename));
+        $this->assertEquals("1.4", $oldPdfVersion);
+        $this->assertEquals("1.7", $newPdfVersion);
     }
 }

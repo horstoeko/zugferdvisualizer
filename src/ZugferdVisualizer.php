@@ -84,6 +84,14 @@ class ZugferdVisualizer
     protected $pdfPaperSize = "A4-P";
 
     /**
+     * A callbacl which is called when MPDF is instanciated. Here
+     * is the possibillity to set custom options for MPDF
+     *
+     * @var callable|null
+     */
+    protected $mpdfInitCallback = null;
+
+    /**
      * Constructor
      *
      * @param ZugferdDocumentReader                        $documentReader
@@ -169,6 +177,18 @@ class ZugferdVisualizer
         if (preg_match('/([0-9a-zA-Z]*)-([P,L])/i', $pdfPaperSize, $m)) {
             $this->pdfPaperSize = $pdfPaperSize;
         }
+    }
+
+    /**
+     * Set the callback which is called after the internal instance
+     * of the PDF-Engine is instanciated
+     *
+     * @param callable $callback
+     * @return void
+     */
+    public function setPdfInitCallback(callable $callback): void
+    {
+        $this->mpdfInitCallback = $callback;
     }
 
     /**
@@ -273,15 +293,19 @@ class ZugferdVisualizer
 
         $pdf = new Mpdf(
             [
-            'tempDir' => sys_get_temp_dir() . '/mpdf',
-            'fontDir' => array_merge($defaultFontDirs, $this->pdfFontDirectories),
-            'fontdata' => $defaultFontData + $this->pdfFontData,
-            'default_font' => $this->pdfFontDefault,
-            'format' => $this->pdfPaperSize,
-            'PDFA' => true,
-            'PDFAauto' => true,
+                'tempDir' => sys_get_temp_dir() . '/mpdf',
+                'fontDir' => array_merge($defaultFontDirs, $this->pdfFontDirectories),
+                'fontdata' => $defaultFontData + $this->pdfFontData,
+                'default_font' => $this->pdfFontDefault,
+                'format' => $this->pdfPaperSize,
+                'PDFA' => true,
+                'PDFAauto' => true,
             ]
         );
+
+        if (is_callable($this->mpdfInitCallback)) {
+            call_user_func($this->mpdfInitCallback, $pdf, $this);
+        }
 
         return $pdf;
     }
