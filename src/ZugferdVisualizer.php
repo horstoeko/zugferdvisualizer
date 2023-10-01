@@ -84,12 +84,20 @@ class ZugferdVisualizer
     protected $pdfPaperSize = "A4-P";
 
     /**
-     * A callbacl which is called when MPDF is instanciated. Here
+     * A callbacl which is called before MPDF is instanciated. Here
      * is the possibillity to set custom options for MPDF
      *
      * @var callable|null
      */
-    protected $mpdfInitCallback = null;
+    protected $mpdfPreInitCallback = null;
+
+    /**
+     * A callbacl which is called after MPDF is instanciated. Here
+     * is the possibillity to set custom options for MPDF
+     *
+     * @var callable|null
+     */
+    protected $mpdfRuntimeInitCallback = null;
 
     /**
      * Constructor
@@ -180,15 +188,27 @@ class ZugferdVisualizer
     }
 
     /**
+     * Set the callback which is called before the internal instance
+     * of the PDF-Engine is instanciated
+     *
+     * @param callable $callback
+     * @return void
+     */
+    public function setPdfPreInitCallback(callable $callback): void
+    {
+        $this->mpdfPreInitCallback = $callback;
+    }
+
+    /**
      * Set the callback which is called after the internal instance
      * of the PDF-Engine is instanciated
      *
      * @param callable $callback
      * @return void
      */
-    public function setPdfInitCallback(callable $callback): void
+    public function setPdfRuntimeInitCallback(callable $callback): void
     {
-        $this->mpdfInitCallback = $callback;
+        $this->mpdfRuntimeInitCallback = $callback;
     }
 
     /**
@@ -291,20 +311,24 @@ class ZugferdVisualizer
         $defaultFontConfig = (new FontVariables())->getDefaults();
         $defaultFontData = $defaultFontConfig['fontdata'];
 
-        $pdf = new Mpdf(
-            [
-                'tempDir' => sys_get_temp_dir() . '/mpdf',
-                'fontDir' => array_merge($defaultFontDirs, $this->pdfFontDirectories),
-                'fontdata' => $defaultFontData + $this->pdfFontData,
-                'default_font' => $this->pdfFontDefault,
-                'format' => $this->pdfPaperSize,
-                'PDFA' => true,
-                'PDFAauto' => true,
-            ]
-        );
+        $config = [
+            'tempDir' => sys_get_temp_dir() . '/mpdf',
+            'fontDir' => array_merge($defaultFontDirs, $this->pdfFontDirectories),
+            'fontdata' => $defaultFontData + $this->pdfFontData,
+            'default_font' => $this->pdfFontDefault,
+            'format' => $this->pdfPaperSize,
+            'PDFA' => true,
+            'PDFAauto' => true,
+        ];
 
-        if (is_callable($this->mpdfInitCallback)) {
-            call_user_func($this->mpdfInitCallback, $pdf, $this);
+        if (is_callable($this->mpdfPreInitCallback)) {
+            call_user_func($this->mpdfPreInitCallback, $config, $this);
+        }
+
+        $pdf = new Mpdf($config);
+
+        if (is_callable($this->mpdfRuntimeInitCallback)) {
+            call_user_func($this->mpdfRuntimeInitCallback, $pdf, $this);
         }
 
         return $pdf;

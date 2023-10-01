@@ -21,6 +21,8 @@
     - [Use a custom renderer](#use-a-custom-renderer)
     - [Use the built-in Laravel renderer](#use-the-built-in-laravel-renderer)
     - [Set PDF-Options](#set-pdf-options)
+      - [Set options before instanciating the internal PDF-Engine (```setPdfPreInitCallback```)](#set-options-before-instanciating-the-internal-pdf-engine-setpdfpreinitcallback)
+      - [Set options after instanciating the internal PDF-Engine (```setPdfRuntimeInitCallback```)](#set-options-after-instanciating-the-internal-pdf-engine-setpdfruntimeinitcallback)
 
 ## License
 
@@ -219,13 +221,28 @@ class ZugferdController extends Controller
 If you want to make further settings to the internal PDF engine, then you can change further settings using a callback.
 The usage is as follows:
 
+#### Set options before instanciating the internal PDF-Engine (```setPdfPreInitCallback```)
+
 ```php
 use horstoeko\zugferdvisualizer\ZugferdVisualizer;
 use Mpdf\Mpdf;
 
 $visualizer = new ZugferdVisualizer(static::$document);
 $visualizer->setDefaultTemplate();
-$visualizer->setPdfInitCallback(function (Mpdf $mpdf, ZugferdVisualizer $visualizer) {
+$visualizer->setPdfPreInitCallback(function (array $config, ZugferdVisualizer $visualizer) {
+    $config["orientation"] = "L";
+});
+```
+
+#### Set options after instanciating the internal PDF-Engine (```setPdfRuntimeInitCallback```)
+
+```php
+use horstoeko\zugferdvisualizer\ZugferdVisualizer;
+use Mpdf\Mpdf;
+
+$visualizer = new ZugferdVisualizer(static::$document);
+$visualizer->setDefaultTemplate();
+$visualizer->setPdfRuntimeInitCallback(function (Mpdf $mpdf, ZugferdVisualizer $visualizer) {
     $mpdf->pdf_version = "1.7";
 });
 ```

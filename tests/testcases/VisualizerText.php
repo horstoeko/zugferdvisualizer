@@ -319,7 +319,8 @@ class VisualizerText extends TestCase
     }
 
     /**
-     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::setPdfInitCallback
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::setPdfPreInitCallback
+     * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::setPdfRuntimeInitCallback
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderMarkup
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderPdf
      * @covers \horstoeko\zugferdvisualizer\ZugferdVisualizer::renderPdfFile
@@ -331,12 +332,19 @@ class VisualizerText extends TestCase
      */
     public function testPdfInitCallback(): void
     {
+        $oldOrientation = "";
+        $newOrientation = "";
         $oldPdfVersion = "";
         $newPdfVersion = "";
 
         $visualizer = new ZugferdVisualizer(static::$document);
         $visualizer->setDefaultTemplate();
-        $visualizer->setPdfInitCallback(function (Mpdf $mpdf, ZugferdVisualizer $visualizer) use (&$oldPdfVersion, &$newPdfVersion) {
+        $visualizer->setPdfPreInitCallback(function(array $config, ZugferdVisualizer $visualizer) use (&$oldOrientation, &$newOrientation) {
+            $oldOrientation = $config["orientation"] ?? "P";
+            $config["orientation"] = "L";
+            $newOrientation = $config["orientation"];
+        });
+        $visualizer->setPdfRuntimeInitCallback(function (Mpdf $mpdf, ZugferdVisualizer $visualizer) use (&$oldPdfVersion, &$newPdfVersion) {
             $oldPdfVersion = $mpdf->pdf_version;
             $mpdf->pdf_version = "1.7";
             $newPdfVersion = $mpdf->pdf_version;
@@ -349,6 +357,8 @@ class VisualizerText extends TestCase
         $visualizer->renderPdfFile($toFilename);
 
         $this->assertTrue(file_exists($toFilename));
+        $this->assertEquals("P", $oldOrientation);
+        $this->assertEquals("L", $newOrientation);
         $this->assertEquals("1.4", $oldPdfVersion);
         $this->assertEquals("1.7", $newPdfVersion);
     }
