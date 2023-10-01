@@ -20,6 +20,7 @@
     - [Create a custom renderer](#create-a-custom-renderer)
     - [Use a custom renderer](#use-a-custom-renderer)
     - [Use the built-in Laravel renderer](#use-the-built-in-laravel-renderer)
+    - [Set PDF-Options](#set-pdf-options)
 
 ## License
 
@@ -211,4 +212,22 @@ class ZugferdController extends Controller
         return response()->download(storage_path('app/invoice_1.pdf'), "invoice_1.pdf", $headers);
     }
 }
+```
+
+### Set PDF-Options
+
+If you want to make further settings to the internal PDF engine, then you can change further settings using a callback.
+The usage is as follows:
+
+```php
+use horstoeko\zugferdvisualizer\ZugferdVisualizer;
+use Mpdf\Mpdf;
+
+$visualizer = new ZugferdVisualizer(static::$document);
+$visualizer->setDefaultTemplate();
+$visualizer->setPdfInitCallback(function (Mpdf $mpdf, ZugferdVisualizer $visualizer) {
+    $mpdf->pdf_version = "1.7";
+});
+
+For configuration options, please consult the documentation of [mPdf](https://mpdf.github.io/configuration/configuration-v7-x.html)
 ```
