@@ -322,7 +322,7 @@ class ZugferdVisualizer
         ];
 
         if (is_callable($this->mpdfPreInitCallback)) {
-            call_user_func($this->mpdfPreInitCallback, $config, $this);
+            $config = call_user_func($this->mpdfPreInitCallback, $config, $this);
         }
 
         $pdf = new Mpdf($config);

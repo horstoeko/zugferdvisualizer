@@ -231,6 +231,7 @@ $visualizer = new ZugferdVisualizer(static::$document);
 $visualizer->setDefaultTemplate();
 $visualizer->setPdfPreInitCallback(function (array $config, ZugferdVisualizer $visualizer) {
     $config["orientation"] = "L";
+    return $config;
 });
 ```
 

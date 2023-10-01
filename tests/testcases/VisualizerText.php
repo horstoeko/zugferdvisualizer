@@ -343,6 +343,7 @@ class VisualizerText extends TestCase
             $oldOrientation = $config["orientation"] ?? "P";
             $config["orientation"] = "L";
             $newOrientation = $config["orientation"];
+            return $config;
         });
         $visualizer->setPdfRuntimeInitCallback(function (Mpdf $mpdf, ZugferdVisualizer $visualizer) use (&$oldPdfVersion, &$newPdfVersion) {
             $oldPdfVersion = $mpdf->pdf_version;
