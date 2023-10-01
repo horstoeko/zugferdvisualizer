@@ -136,6 +136,7 @@ If you want to implement your own markup renderer, then your class must implemen
 * `render`
 
 ```php
+use horstoeko\zugferd\ZugferdDocumentReader;
 use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract;
 
 class MyOwnRenderer implements ZugferdVisualizerMarkupRendererContract
@@ -146,7 +147,7 @@ class MyOwnRenderer implements ZugferdVisualizerMarkupRendererContract
         // Method must return a boolean value
     }
 
-    public function render(ZugferdDocument $document, string $template): string
+    public function render(ZugferdDocumentReader $document, string $template): string
     {
         // Put your logic here
         // Method must return a string (rendered HTML markup)

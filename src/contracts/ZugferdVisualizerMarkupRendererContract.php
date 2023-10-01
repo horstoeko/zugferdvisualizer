@@ -9,7 +9,7 @@
 
 namespace horstoeko\zugferdvisualizer\contracts;
 
-use horstoeko\zugferd\ZugferdDocument;
+use horstoeko\zugferd\ZugferdDocumentReader;
 
 /**
  * Interface representing the markup renderer contract
@@ -37,5 +37,5 @@ interface ZugferdVisualizerMarkupRendererContract
      * @param  string          $template
      * @return string
      */
-    public function render(ZugferdDocument $document, string $template): string;
+    public function render(ZugferdDocumentReader $document, string $template): string;
 }

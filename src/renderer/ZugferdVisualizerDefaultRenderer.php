@@ -9,7 +9,7 @@
 
 namespace horstoeko\zugferdvisualizer\renderer;
 
-use horstoeko\zugferd\ZugferdDocument;
+use horstoeko\zugferd\ZugferdDocumentReader;
 use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract;
 
 /**
@@ -34,7 +34,7 @@ class ZugferdVisualizerDefaultRenderer implements ZugferdVisualizerMarkupRendere
     /**
      * @inheritDoc
      */
-    public function render(ZugferdDocument $document, string $template): string
+    public function render(ZugferdDocumentReader $document, string $template): string
     {
         ob_start();
         include $template;
