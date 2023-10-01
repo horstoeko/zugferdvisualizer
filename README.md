@@ -228,6 +228,6 @@ $visualizer->setDefaultTemplate();
 $visualizer->setPdfInitCallback(function (Mpdf $mpdf, ZugferdVisualizer $visualizer) {
     $mpdf->pdf_version = "1.7";
 });
+```
 
 For configuration options, please consult the documentation of [mPdf](https://mpdf.github.io/configuration/configuration-v7-x.html)
-```
