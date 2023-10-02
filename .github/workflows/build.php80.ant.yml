@@ -10,7 +10,6 @@ on:
       - '**.md'
       - '**.tmpl'
       - '.github/**'
-  workflow_dispatch:
 
 jobs:
   build:
@@ -33,8 +32,7 @@ jobs:
         with:
             files: "./build/logs/junit.xml"
       - name: Publish Coverage Report
-        uses: danhunsaker/clover-reporter-action@v0.2.17-clover
+        uses: lucassabreu/comment-coverage-clover@main
         if: always()
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            clover-file: "./build/logs/clover.xml"
+            file: "./build/logs/clover.xml"
