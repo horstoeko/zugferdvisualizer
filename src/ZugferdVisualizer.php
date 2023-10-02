@@ -9,14 +9,22 @@
 
 namespace horstoeko\zugferdvisualizer;
 
+use Exception;
 use horstoeko\zugferd\ZugferdDocumentReader;
 use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract;
 use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateDefinedException;
 use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateNotExistsException;
 use horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer;
+use InvalidArgumentException;
 use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
+use Mpdf\Exception\AssetFetchingException;
 use Mpdf\Mpdf;
+use Mpdf\MpdfException;
+use RuntimeException;
+use setasign\Fpdi\PdfParser\PdfParserException;
+use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
+use setasign\Fpdi\PdfParser\Type\PdfTypeException;
 
 /**
  * Class representing the main visualizer class
@@ -102,8 +110,9 @@ class ZugferdVisualizer
     /**
      * Constructor
      *
-     * @param ZugferdDocumentReader                        $documentReader
-     * @param ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @param  ZugferdDocumentReader                        $documentReader
+     * @param  null|ZugferdVisualizerMarkupRendererContract $renderer
+     * @return void
      */
     public function __construct(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null)
     {
@@ -191,7 +200,7 @@ class ZugferdVisualizer
      * Set the callback which is called before the internal instance
      * of the PDF-Engine is instanciated
      *
-     * @param callable $callback
+     * @param  callable $callback
      * @return void
      */
     public function setPdfPreInitCallback(callable $callback): void
@@ -203,7 +212,7 @@ class ZugferdVisualizer
      * Set the callback which is called after the internal instance
      * of the PDF-Engine is instanciated
      *
-     * @param callable $callback
+     * @param  callable $callback
      * @return void
      */
     public function setPdfRuntimeInitCallback(callable $callback): void
@@ -231,15 +240,20 @@ class ZugferdVisualizer
      * Renders the PDF by markup (HTML) and returns the PDF as a string
      *
      * @return string
+     * @throws ZugferdVisualizerNoTemplateDefinedException
+     * @throws ZugferdVisualizerNoTemplateNotExistsException
+     * @throws MpdfException
+     * @throws AssetFetchingException
+     * @throws RuntimeException
+     * @throws Exception
+     * @throws PdfParserException
+     * @throws CrossReferenceException
+     * @throws PdfTypeException
+     * @throws InvalidArgumentException
      */
     public function renderPdf(): string
     {
-        $markup = $this->renderMarkup();
-
-        $pdf = $this->instanciatePdfEngine();
-        $pdf->WriteHTML($markup);
-
-        return $pdf->Output('dummy.pdf', 'S');
+        return $this->internalRenderPdf($this->renderMarkup(), "S", "dummy.pdf");
     }
 
     /**
@@ -247,14 +261,42 @@ class ZugferdVisualizer
      *
      * @param  string $toFilename
      * @return void
+     * @throws ZugferdVisualizerNoTemplateDefinedException
+     * @throws ZugferdVisualizerNoTemplateNotExistsException
+     * @throws MpdfException
+     * @throws AssetFetchingException
+     * @throws RuntimeException
+     * @throws Exception
+     * @throws PdfParserException
+     * @throws CrossReferenceException
+     * @throws PdfTypeException
+     * @throws InvalidArgumentException
      */
     public function renderPdfFile(string $toFilename): void
     {
-        $markup = $this->renderMarkup();
+        $this->internalRenderPdf($this->renderMarkup(), "F", $toFilename);
+    }
 
+    /**
+     * @param  string $markup
+     * @param  string $outputDestination
+     * @param  string $toFilename
+     * @return string|void
+     * @throws MpdfException
+     * @throws AssetFetchingException
+     * @throws RuntimeException
+     * @throws Exception
+     * @throws PdfParserException
+     * @throws CrossReferenceException
+     * @throws PdfTypeException
+     * @throws InvalidArgumentException
+     */
+    protected function internalRenderPdf(string $markup, string $outputDestination, string $toFilename)
+    {
         $pdf = $this->instanciatePdfEngine();
         $pdf->WriteHTML($markup);
-        $pdf->Output($toFilename, 'F');
+
+        return $pdf->Output($toFilename, $outputDestination);
     }
 
     /**

@@ -339,17 +339,21 @@ class VisualizerText extends TestCase
 
         $visualizer = new ZugferdVisualizer(static::$document);
         $visualizer->setDefaultTemplate();
-        $visualizer->setPdfPreInitCallback(function(array $config, ZugferdVisualizer $visualizer) use (&$oldOrientation, &$newOrientation) {
-            $oldOrientation = $config["orientation"] ?? "P";
-            $config["orientation"] = "L";
-            $newOrientation = $config["orientation"];
-            return $config;
-        });
-        $visualizer->setPdfRuntimeInitCallback(function (Mpdf $mpdf, ZugferdVisualizer $visualizer) use (&$oldPdfVersion, &$newPdfVersion) {
-            $oldPdfVersion = $mpdf->pdf_version;
-            $mpdf->pdf_version = "1.7";
-            $newPdfVersion = $mpdf->pdf_version;
-        });
+        $visualizer->setPdfPreInitCallback(
+            function (array $config, ZugferdVisualizer $visualizer) use (&$oldOrientation, &$newOrientation) {
+                $oldOrientation = $config["orientation"] ?? "P";
+                $config["orientation"] = "L";
+                $newOrientation = $config["orientation"];
+                return $config;
+            }
+        );
+        $visualizer->setPdfRuntimeInitCallback(
+            function (Mpdf $mpdf, ZugferdVisualizer $visualizer) use (&$oldPdfVersion, &$newPdfVersion) {
+                $oldPdfVersion = $mpdf->pdf_version;
+                $mpdf->pdf_version = "1.7";
+                $newPdfVersion = $mpdf->pdf_version;
+            }
+        );
 
         $toFilename = dirname(__FILE__) . "/invoice.pdf";
 
