@@ -29,11 +29,6 @@ jobs:
         if: always()
         with:
             files: "./build/logs/junit.xml"
-      - name: Publish Coverage Report
-        uses: lucassabreu/comment-coverage-clover@main
-        if: always()
-        with:
-            file: "./build/logs/clover.xml"
       - name: Make Release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
