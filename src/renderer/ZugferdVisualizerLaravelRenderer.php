@@ -9,7 +9,7 @@
 
 namespace horstoeko\zugferdvisualizer\renderer;
 
-use horstoeko\zugferd\ZugferdDocument;
+use horstoeko\zugferd\ZugferdDocumentReader;
 use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract;
 
 /**
@@ -43,7 +43,7 @@ class ZugferdVisualizerLaravelRenderer implements ZugferdVisualizerMarkupRendere
     /**
      * @inheritDoc
      */
-    public function render(ZugferdDocument $document, string $template): string
+    public function render(ZugferdDocumentReader $document, string $template): string
     {
         if (!function_exists("view")) {
             return "";

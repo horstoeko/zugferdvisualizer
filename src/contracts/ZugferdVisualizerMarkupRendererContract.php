@@ -33,8 +33,8 @@ interface ZugferdVisualizerMarkupRendererContract
     /**
      * Render the HTML markup for the Zugferd document
      *
-     * @param  ZugferdVisualizerMarkupRendererContract $document
-     * @param  string                                  $template
+     * @param  ZugferdDocumentReader $document
+     * @param  string                $template
      * @return string
      */
     public function render(ZugferdDocumentReader $document, string $template): string;
