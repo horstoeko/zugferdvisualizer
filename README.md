@@ -23,6 +23,7 @@
     - [Set PDF-Options](#set-pdf-options)
       - [Set options before instanciating the internal PDF-Engine (```setPdfPreInitCallback```)](#set-options-before-instanciating-the-internal-pdf-engine-setpdfpreinitcallback)
       - [Set options after instanciating the internal PDF-Engine (```setPdfRuntimeInitCallback```)](#set-options-after-instanciating-the-internal-pdf-engine-setpdfruntimeinitcallback)
+      - [Working with custom fonts](#working-with-custom-fonts)
 
 ## License
 
@@ -249,4 +250,44 @@ $visualizer->setPdfRuntimeInitCallback(function (Mpdf $mpdf, ZugferdVisualizer $
 });
 ```
 
-For configuration options, please consult the documentation of [mPdf](https://mpdf.github.io/configuration/configuration-v7-x.html)
+#### Working with custom fonts
+
+If you would like to use your own fonts, that's no problem at all. First you have to specify one or more directories in which your fonts are located:
+
+```php
+use horstoeko\zugferdvisualizer\ZugferdVisualizer;
+use Mpdf\Mpdf;
+
+$visualizer = new ZugferdVisualizer(static::$document);
+$visualizer->addPdfFontDirectory('/var/fonts1/');
+$visualizer->addPdfFontDirectory('/var/fonts2/');
+```
+
+Next, you need to define the font properties:
+
+* The first parameter sets the name of the font-family
+* Thé second parameter sets the type of the font
+  * R - Regular
+  * I - Italic
+  * B - Bold
+  * BI - Bold & Italic
+* The third parameter sets the filename under which the font can be found in the specified font-directories
+
+```php
+$visualizer->addPdfFontData('comicsans', 'R', 'comic.ttf');
+$visualizer->addPdfFontData('comicsans', 'I', 'comici.ttf');
+```
+
+If you want to set a custom font as the default font, you can use the following method:
+
+```php
+$visualizer->setPdfFontDefault("comicsans");
+```
+
+You can also use the name of the font family in the style attribute of any HTML elements in your template:
+
+```html
+<p style="font-family: comicsans">Text in Comic Sans</p>
+```
+
+For more configuration options, please consult the documentation of [mPdf](https://mpdf.github.io/configuration/configuration-v7-x.html)
