@@ -57,6 +57,9 @@ $reader = ZugferdDocumentReader::readAndGuessFromContent($document->getContent()
 
 $visualizer = new ZugferdVisualizer($reader);
 $visualizer->setDefaultTemplate();
+$visualizer->addPdfFontDirectory(dirname(__FILE__) . '/fonts/');
+$visualizer->addPdfFontData('comicsans', 'R', 'comic.ttf');
+$visualizer->addPdfFontData('comicsans', 'I', 'comici.ttf');
 $visualizer->setPdfFontDefault("courier");
 $visualizer->setPdfPaperSize('A4-P');
 

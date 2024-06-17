@@ -173,6 +173,22 @@ class ZugferdVisualizer
     }
 
     /**
+     * Add a font definition
+     *
+     * - Example 1: ``$visualizer->addPdfFont('frutiger', 'R', 'Frutiger-Normal.ttf')``
+     * - Example 2: ``$visualizer->addPdfFont('frutiger', 'I', 'FrutigerObl-Normal.ttf')``
+     *
+     * @param string $name
+     * @param string $style
+     * @param string $filename
+     * @return void
+     */
+    public function addPdfFontData(string $name, string $style, string $filename): void
+    {
+        $this->pdfFontData[$name][$style] = $filename;
+    }
+
+    /**
      * Sets the default PDF default font
      *
      * @param  string $pdfFontDefault

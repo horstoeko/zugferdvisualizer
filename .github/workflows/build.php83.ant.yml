@@ -1,4 +1,4 @@
-name: CI (Ant, PHP 8.0)
+name: CI (Ant, PHP 8.3)
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
       - name: Setup PHP with PECL extension
         uses: shivammathur/setup-php@v2
         with:
-            php-version: '8.0'
+            php-version: '8.3'
             extensions: imagick, swoole
             coverage: xdebug
       - name: Build with Ant
