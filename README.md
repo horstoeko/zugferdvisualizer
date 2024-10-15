@@ -1,8 +1,11 @@
 # ZUGFeRD/XRechnung/Factur-X Visualizer
 
-[![Latest Stable Version](https://poser.pugx.org/horstoeko/zugferdvisualizer/v/stable.png)](https://packagist.org/packages/horstoeko/zugferdvisualizer) [![Total Downloads](https://poser.pugx.org/horstoeko/zugferdvisualizer/downloads.png)](https://packagist.org/packages/horstoeko/zugferdvisualizer) [![Latest Unstable Version](https://poser.pugx.org/horstoeko/zugferdvisualizer/v/unstable.png)](https://packagist.org/packages/horstoeko/zugferdvisualizer) [![License](https://poser.pugx.org/horstoeko/zugferdvisualizer/license.png)](https://packagist.org/packages/horstoeko/zugferdvisualizer) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/horstoeko/zugferdvisualizer)
+[![Latest Stable Version](https://img.shields.io/packagist/v/horstoeko/zugferdvisualizer.svg?style=plastic)](https://packagist.org/packages/horstoeko/zugferdvisualizer)
+[![PHP version](https://img.shields.io/packagist/php-v/horstoeko/zugferdvisualizer.svg?style=plastic)](https://packagist.org/packages/horstoeko/zugferdvisualizer)
+[![License](https://img.shields.io/packagist/l/horstoeko/zugferdvisualizer.svg?style=plastic)](https://packagist.org/packages/horstoeko/zugferdvisualizer)
 
-[![CI (Ant, PHP 7.3)](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.php73.ant.yml/badge.svg)](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.php73.ant.yml) [![CI (Ant, PHP 7.4)](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.php74.ant.yml/badge.svg)](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.php74.ant.yml) [![CI (PHP 8.0)](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.php80.ant.yml/badge.svg)](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.php80.ant.yml) [![CI (PHP 8.1)](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.php81.ant.yml/badge.svg)](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.php81.ant.yml)
+[![Build Status](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.ci.yml/badge.svg)](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.ci.yml)
+[![Release Status](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.release.yml/badge.svg)](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.release.yml)
 
 ## Table of Contents
 
