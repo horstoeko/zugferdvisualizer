@@ -10,20 +10,21 @@
 namespace horstoeko\zugferdvisualizer;
 
 use Exception;
+use InvalidArgumentException;
+use RuntimeException;
+use horstoeko\zugferd\ZugferdDocumentBuilder;
 use horstoeko\zugferd\ZugferdDocumentReader;
 use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract;
 use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateDefinedException;
 use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateNotExistsException;
 use horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer;
-use InvalidArgumentException;
 use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
 use Mpdf\Exception\AssetFetchingException;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
-use RuntimeException;
-use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
+use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\Type\PdfTypeException;
 
 /**
@@ -108,11 +109,38 @@ class ZugferdVisualizer
     protected $mpdfRuntimeInitCallback = null;
 
     /**
+     * Factory for creating a visualizer by a ZugferdDocumentReader
+     *
+     * @param ZugferdDocumentReader $documentReader
+     * @param ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @return ZugferdVisualizer
+     */
+    public static function fromDocumentReader(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null): ZugferdVisualizer
+    {
+        return new static($documentReader, $renderer);
+    }
+
+    /**
+     * Factory for creating a visualizer by a ZugferdDocumentReader
+     *
+     * @param ZugferdDocumentBuilder $documentBuilder
+     * @param ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @return ZugferdVisualizer
+     */
+    public static function fromDocumentBuilder(ZugferdDocumentBuilder $documentBuilder, ?ZugferdVisualizerMarkupRendererContract $renderer = null)
+    {
+        $documentReader = ZugferdDocumentReader::readAndGuessFromContent($documentBuilder->getContent());
+
+        return static::fromDocumentReader($documentReader, $renderer);
+    }
+
+    /**
      * Constructor
      *
      * @param  ZugferdDocumentReader                        $documentReader
      * @param  null|ZugferdVisualizerMarkupRendererContract $renderer
      * @return void
+     * @deprecated v2.0.0 Direct call of constructor will be removed in the future. Use static factory methods instead
      */
     public function __construct(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null)
     {
@@ -207,7 +235,7 @@ class ZugferdVisualizer
      */
     public function setPdfPaperSize(string $pdfPaperSize): void
     {
-        if (preg_match('/([0-9a-zA-Z]*)-([P,L])/i', $pdfPaperSize, $m)) {
+        if (preg_match('/([0-9a-zA-Z]*)-([P,L])/i', $pdfPaperSize, $_)) {
             $this->pdfPaperSize = $pdfPaperSize;
         }
     }
