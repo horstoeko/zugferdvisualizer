@@ -127,7 +127,7 @@ class ZugferdVisualizer
      * @param ZugferdVisualizerMarkupRendererContract|null $renderer
      * @return ZugferdVisualizer
      */
-    public static function fromDocumentBuilder(ZugferdDocumentBuilder $documentBuilder, ?ZugferdVisualizerMarkupRendererContract $renderer = null)
+    public static function fromDocumentBuilder(ZugferdDocumentBuilder $documentBuilder, ?ZugferdVisualizerMarkupRendererContract $renderer = null): ZugferdVisualizer
     {
         $documentReader = ZugferdDocumentReader::readAndGuessFromContent($documentBuilder->getContent());
 
