@@ -202,17 +202,17 @@
 						])); ?>
         </p>
         <h1 style="margin: 0; padding: 0; margin-top: 50px">
-            <?= \horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultTransformer::transformDocTypeCode($documenttypecode); ?>
+            <?= \horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerGermanTransformer::transformDocTypeCode($documenttypecode); ?>
         </h1>
         <p>
 				<table class="postable">
 					<thead>
 						<tr>
-							<th>Invoice date</th>
-							<th>Delivery date</th>
-							<th>Invoice no</th>
-							<th>Customer no</th>
-							<th>Reference</th>
+							<th>Rechnungsdatum</th>
+							<th>Lieferdatum</th>
+							<th>Rechnungsnummer</th>
+							<th>Kundennummer</th>
+							<th>Kundenreferenz</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -226,12 +226,6 @@
 					</tbody>
 				</table>
         </p>
-        <p style="margin-top: 50px" class="bold">
-            Dear customer,
-        </p>
-        <p>
-            We take the liberty of invoicing you for the following items
-        </p>
         <?php //$document->getDocumentNotes($documentNotes); ?>
         <?php //foreach ($documentNotes as $documentNote) { ?>
         <!--<p class="pb-0">-->
@@ -242,11 +236,11 @@
             <thead>
                 <tr>
                     <th class="posno">Pos.</th>
-                    <th class="posdesc">Description</th>
-                    <th class="posqty">Qty</th>
-                    <th class="posunitprice">Price</th>
-                    <th class="poslineamount">Amount</th>
-                    <th class="poslinevat">VAT %</th>
+                    <th class="posdesc">Bezeichnung</th>
+                    <th class="posqty">Menge</th>
+                    <th class="posunitprice">Preis</th>
+                    <th class="poslineamount">Anzahl</th>
+                    <th class="poslinevat">Steuer</th>
                 </tr>
             </thead>
             <tbody>
@@ -274,7 +268,7 @@
                 <tr>
                     <td class="posno<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $lineid; ?></td>
                     <td class="posdesc<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $prodname; ?></td>
-                    <td class="posqty<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $billedquantity; ?>&nbsp;<?= \horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultTransformer::transformUnit($billedquantityunitcode) ?></td>
+                    <td class="posqty<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $billedquantity; ?>&nbsp;<?= \horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerGermanTransformer::transformUnit($billedquantityunitcode) ?></td>
                     <td class="posunitprice<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo number_format($netpriceamount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                     <td class="poslineamount<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo number_format($lineTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                     <?php if ($document->firstDocumentPositionTax()) { ?>
@@ -290,7 +284,7 @@
                     <?php $document->getDocumentPositionGrossPriceAllowanceCharge($actualAmount, $isCharge, $calculationPercent, $basisAmount, $reason, $taxTypeCode, $taxCategoryCode, $rateApplicablePercent, $sequence, $basisQuantity, $basisQuantityUnitCode, $reasonCode); ?>
                     <tr>
                         <td class="posno">&nbsp;</td>
-                        <td class="posdesc bold italic"><?php echo ($isCharge ? "Charge" : "Allowance") ?></td>
+                        <td class="posdesc bold italic"><?php echo ($isCharge ? "Gebühr" : "Nachlass") ?></td>
                         <td class="posqty">&nbsp;</td>
                         <td class="posunitprice italic"><?php echo number_format($actualAmount, 2); ?> (<?php echo number_format($grossAmount, 2); ?>) <?php echo $invoiceCurrency; ?></td>
                     </tr>
@@ -310,14 +304,14 @@
                 </tr>
                 <tr>
                     <td colspan="3">&nbsp;</td>
-                    <td colspan="3" class="bold fs-11 space">Allowance/Charge</td>
+                    <td colspan="3" class="bold fs-11 space">Nachlass/Gebühren</td>
                 </tr>
                 <?php $isFirstDocumentAllowanceCharge = true; ?>
                 <?php do { ?>
                 <?php $document->getDocumentAllowanceCharge($actualAmount, $isCharge, $taxCategoryCode, $taxTypeCode, $rateApplicablePercent, $sequence, $calculationPercent, $basisAmount, $basisQuantity, $basisQuantityUnitCode, $reasonCode, $reason); ?>
                 <tr>
                 <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?>" colspan="3">&nbsp;</td>
-                <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalname"><?php echo $reason ? $reason : ($isCharge ? "Charge" : "Allowance"); ?></td>
+                <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalname"><?php echo $reason ? $reason : ($isCharge ? "Gebühr" : "Nachlass"); ?></td>
                 <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalvalue"><?php echo number_format($basisAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 <td class="<?php echo $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalvalue bold"><?php echo number_format($actualAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
@@ -335,45 +329,45 @@
                 </tr>
                 <tr>
                     <td colspan="3">&nbsp;</td>
-                    <td colspan="3" class="bold fs-11 space">Totals</td>
+                    <td colspan="3" class="bold fs-11 space">Summe</td>
                 </tr>
                 <tr>
                     <td class="space" colspan="3">&nbsp;</td>
-                    <td class="space totalname" colspan="2">Net Total</td>
+                    <td class="space totalname" colspan="2">Netto</td>
                     <td class="space totalvalue"><?php echo number_format($lineTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <?php if($chargeTotalAmount != 0) { ?>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname" colspan="2">Charge Total</td>
+                    <td class="totalname" colspan="2">Gebühren Gesamt</td>
                     <td class="totalvalue"><?php echo number_format($chargeTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <?php } ?>
                 <?php if($allowanceTotalAmount != 0) { ?>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname" colspan="2">Allowance Total</td>
+                    <td class="totalname" colspan="2">Nachlass Gesamt</td>
                     <td class="totalvalue"><?php echo number_format($allowanceTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <?php } ?>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname" colspan="2">Tax</td>
+                    <td class="totalname" colspan="2">Steuern</td>
                     <td class="totalvalue"><?php echo number_format($taxTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname bold" colspan="2">Gross Total</td>
+                    <td class="totalname bold" colspan="2">Brutto Gesamt</td>
                     <td class="totalvalue bold"><?php echo number_format($grandTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname bold" colspan="2">Already paid</td>
+                    <td class="totalname bold" colspan="2">Bereits bezahlt</td>
                     <td class="totalvalue bold"><?php echo number_format($totalPrepaidAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname bold" colspan="2">Amount to pay</td>
+                    <td class="totalname bold" colspan="2">Zahlbetrag</td>
                     <td class="totalvalue bold"><?php echo number_format($duePayableAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
 
@@ -387,7 +381,7 @@
                 </tr>
                 <tr>
                     <td colspan="3">&nbsp;</td>
-                    <td colspan="3" class="bold fs-11">VAT Breakdown</td>
+                    <td colspan="3" class="bold fs-11">Steuerübersicht</td>
                 </tr>
                 <?php $isfirsttax = true ?>
                 <?php $sumbasisamount = 0.0 ?>
@@ -404,7 +398,7 @@
                 <?php } while ($document->nextDocumentTax()); ?>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname">Total</td>
+                    <td class="totalname">Gesamt</td>
                     <td class="totalvalue"><?php echo number_format($sumbasisamount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                     <td class="totalvalue bold"><?php echo number_format($taxTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
