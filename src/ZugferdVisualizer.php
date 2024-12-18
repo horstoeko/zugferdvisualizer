@@ -380,7 +380,7 @@ class ZugferdVisualizer
     private function testTemplateExists(): void
     {
         if (!$this->renderer->templateExists($this->template)) {
-            throw new ZugferdVisualizerNoTemplateNotExistsException($this->template);
+            throw new ZugferdVisualizerNoTemplateNotExistsException();
         }
     }
 

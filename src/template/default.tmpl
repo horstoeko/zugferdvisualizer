@@ -41,7 +41,6 @@
             }
             table.postable th {
                 padding-bottom: 10px;
-								text-align:left;
             }
             table.postable td.posno,
             table.postable th.posno {
@@ -184,47 +183,22 @@
     </head>
     <body>
         <?php
-				$document->getDocumentInformation($documentno, $documenttypecode, $documentdate, $invoiceCurrency, $taxCurrency, $documentname, $documentlanguage, $effectiveSpecifiedPeriod);
+        $document->getDocumentInformation($documentno, $documenttypecode, $documentdate, $invoiceCurrency, $taxCurrency, $documentname, $documentlanguage, $effectiveSpecifiedPeriod);
         $document->getDocumentBuyer($buyername, $buyerids, $buyerdescription);
         $document->getDocumentBuyerAddress($buyeraddressline1, $buyeraddressline2, $buyeraddressline3, $buyerpostcode, $buyercity, $buyercounty, $buyersubdivision);
-				$document->getDocumentBuyerOrderReferencedDocument($bt13,$btX147);
-				//leitwegeID bt10
-				$document->getDocumentBuyerReference($buyerRef);
-				$document->getDocumentSupplyChainEvent($bt72);
         ?>
         <p>
-            <?= implode('<br/>',array_filter([
-							$buyername,
-							$buyeraddressline1,
-							$buyeraddressline2,
-							$buyeraddressline3,
-							$buyercounty . ' ' . $buyerpostcode . ' ' . $buyercity
-						])); ?>
+            <?php echo $buyername; ?><br>
+            <?php if ($buyeraddressline1) { ?><?php echo $buyeraddressline1; ?><br><?php } ?>
+            <?php if ($buyeraddressline2) { ?><?php echo $buyeraddressline2; ?><br><?php } ?>
+            <?php if ($buyeraddressline3) { ?><?php echo $buyeraddressline3; ?><br><?php } ?>
+            <?php echo $buyercounty . " " . $buyerpostcode . " " . $buyercity; ?><br>
         </p>
         <h1 style="margin: 0; padding: 0; margin-top: 50px">
-            <?= \horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultTransformer::transformDocTypeCode($documenttypecode); ?>
+            Invoice <?php echo $documentno; ?>
         </h1>
-        <p>
-				<table class="postable">
-					<thead>
-						<tr>
-							<th>Invoice date</th>
-							<th>Delivery date</th>
-							<th>Invoice no</th>
-							<th>Customer no</th>
-							<th>Reference</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><?= $documentdate->format("Y-m-d"); ?></td>
-							<td><?= $bt72?->format("Y-m-d") ?? $documentdate->format("Y-m-d");/*optional, filled by invoice date*/ ?></td>
-							<td><?= $documentno; ?></td>
-							<td><?= implode(', ',$buyerids); ?></td>
-							<td><?= $buyerRef . $bt13; ?></td>
-						</tr>
-					</tbody>
-				</table>
+        <p style="margin: 0; padding: 0">
+            Invoice Date <?php echo $documentdate->format("d.m.Y"); ?>
         </p>
         <p style="margin-top: 50px" class="bold">
             Dear customer,
@@ -274,7 +248,7 @@
                 <tr>
                     <td class="posno<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $lineid; ?></td>
                     <td class="posdesc<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $prodname; ?></td>
-                    <td class="posqty<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $billedquantity; ?>&nbsp;<?= \horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultTransformer::transformUnit($billedquantityunitcode) ?></td>
+                    <td class="posqty<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $billedquantity; ?> <?php echo $billedquantityunitcode ?></td>
                     <td class="posunitprice<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo number_format($netpriceamount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                     <td class="poslineamount<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo number_format($lineTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                     <?php if ($document->firstDocumentPositionTax()) { ?>
