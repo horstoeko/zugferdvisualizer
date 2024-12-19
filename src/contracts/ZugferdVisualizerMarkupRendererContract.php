@@ -35,7 +35,8 @@ interface ZugferdVisualizerMarkupRendererContract
      *
      * @param  ZugferdDocumentReader $document
      * @param  string                $template
+		 * @param contracts\ZugferdVisualizerCodelistTransform $transformer
      * @return string
      */
-    public function render(ZugferdDocumentReader $document, string $template): string;
+    public function render(ZugferdDocumentReader $document, string $template, ZugferdVisualizerCodelistTransform $transformer): string;
 }

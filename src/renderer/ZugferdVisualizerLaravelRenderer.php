@@ -9,8 +9,9 @@
 
 namespace horstoeko\zugferdvisualizer\renderer;
 
-use horstoeko\zugferd\ZugferdDocumentReader;
-use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract;
+use horstoeko\zugferd\ZugferdDocumentReader,
+		horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract,
+		horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerCodelistTransform;
 
 /**
  * Class representing the markup renderer for Laravel environments (Blade engine)
@@ -26,6 +27,7 @@ class ZugferdVisualizerLaravelRenderer implements ZugferdVisualizerMarkupRendere
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function templateExists(string $template): bool
     {
         if (!function_exists("view")) {
@@ -43,7 +45,8 @@ class ZugferdVisualizerLaravelRenderer implements ZugferdVisualizerMarkupRendere
     /**
      * @inheritDoc
      */
-    public function render(ZugferdDocumentReader $document, string $template): string
+    #[\Override]
+    public function render(ZugferdDocumentReader $document, string $template, ZugferdVisualizerCodelistTransform $transformer): string
     {
         if (!function_exists("view")) {
             return "";

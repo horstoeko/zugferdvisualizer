@@ -59,6 +59,11 @@ class ZugferdVisualizer
      */
     protected $template = "";
 
+		/** The transformation object used for translation
+		 * @var contracts\ZugferdVisualizerCodelistTransform
+		 */
+		protected $transformer = null;
+
     /**
      * The directories where to search for additional fonts
      *
@@ -166,11 +171,24 @@ class ZugferdVisualizer
      * Set the template to use in the specified renderer
      *
      * @param  string $template
+		 * @param contracts\ZugferdVisualizerCodelistTransform $transformer
      * @return void
      */
-    public function setTemplate(string $template): void
+    public function setTemplate(string $template, contracts\ZugferdVisualizerCodelistTransform $transformer): void
     {
         $this->template = $template;
+				$this->transformer = $transformer;
+    }
+
+		/**
+     * Set the transformation (translation) object to use in the specified renderer
+     *
+     * @param  contracts\ZugferdVisualizerCodelistTransform $transformer
+     * @return void
+     */
+    public function setTransformer(contracts\ZugferdVisualizerCodelistTransform $transformer): void
+    {
+				$this->transformer = $transformer;
     }
 
     /**
@@ -181,7 +199,7 @@ class ZugferdVisualizer
     public function setDefaultTemplate(): void
     {
         $this->setRenderer(new ZugferdVisualizerDefaultRenderer());
-        $this->setTemplate(dirname(__FILE__) . "/template/default.tmpl");
+        $this->setTemplate(dirname(__FILE__) . '/template/default.php', new renderer\ZugferdVisualizerDefaultTransformer());
     }
 
     /**
@@ -277,7 +295,7 @@ class ZugferdVisualizer
         $this->testTemplateIsSet();
         $this->testTemplateExists();
 
-        return $this->renderer->render($this->documentReader, $this->template);
+        return $this->renderer->render($this->documentReader, $this->template, $this->transformer);
     }
 
     /**
