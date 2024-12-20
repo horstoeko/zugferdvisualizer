@@ -6,6 +6,7 @@ use horstoeko\zugferdvisualizer\ZugferdVisualizer;
 use horstoeko\zugferd\codelists\ZugferdPaymentMeans;
 use horstoeko\zugferd\ZugferdDocumentPdfMerger;
 use horstoeko\zugferd\ZugferdDocumentReader;
+use horstoeko\zugferdvisualizer\translators\ZugferdVisualizerDefaultTranslator;
 
 require dirname(__FILE__) . "/../vendor/autoload.php";
 
@@ -57,6 +58,7 @@ $reader = ZugferdDocumentReader::readAndGuessFromContent($document->getContent()
 
 $visualizer = new ZugferdVisualizer($reader);
 $visualizer->setDefaultTemplate();
+$visualizer->setTranslator((new ZugferdVisualizerDefaultTranslator())->addLanguageDirectory(__DIR__)->setCurrentLanguage('de-DE')->setFallbackLanguage('en-US'));
 $visualizer->addPdfFontDirectory(dirname(__FILE__) . '/fonts/');
 $visualizer->addPdfFontData('comicsans', 'R', 'comic.ttf');
 $visualizer->addPdfFontData('comicsans', 'I', 'comici.ttf');

@@ -5,4 +5,5 @@ parameters:
     level: 5
     treatPhpDocTypesAsCertain: false
     excludePaths:
-        - ../src/entities/*
+        - ../src/renderer/ZugferdVisualizerLaravelRenderer.php
+        - ../src/translators/ZugferdVisualizerLaravelTranslator.php

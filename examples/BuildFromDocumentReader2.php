@@ -2,6 +2,7 @@
 
 use horstoeko\zugferd\ZugferdDocumentReader;
 use horstoeko\zugferdvisualizer\ZugferdVisualizer;
+use horstoeko\zugferdvisualizer\translators\ZugferdVisualizerDefaultTranslator;
 
 require dirname(__FILE__) . "/../vendor/autoload.php";
 
@@ -12,6 +13,7 @@ $document = ZugferdDocumentReader::readAndGuessFromFile(dirname(__FILE__) . "/in
 // Run the visualizer using the default renderer
 
 $visualizer = new ZugferdVisualizer($document);
+$visualizer->setTranslator((new ZugferdVisualizerDefaultTranslator())->addLanguageDirectory(__DIR__)->setCurrentLanguage('de-DE')->setFallbackLanguage('en-US'));
 $visualizer->setDefaultTemplate();
 $visualizer->addPdfFontDirectory(dirname(__FILE__) . '/fonts/');
 $visualizer->addPdfFontData('comicsans', 'R', 'comic.ttf');
