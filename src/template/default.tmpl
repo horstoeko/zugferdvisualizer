@@ -195,16 +195,16 @@
             <?php echo $buyercounty . " " . $buyerpostcode . " " . $buyercity; ?><br>
         </p>
         <h1 style="margin: 0; padding: 0; margin-top: 50px">
-            Invoice <?php echo $documentno; ?>
+            <?php echo $translator->translateWithoutPlaceholders($documenttypecode, 'documenttype') ?> <?php echo $documentno; ?>
         </h1>
         <p style="margin: 0; padding: 0">
-            Invoice Date <?php echo $documentdate->format("d.m.Y"); ?>
+            <?php echo $translator->translateWithoutPlaceholders('documentdate', 'generaltexts') ?> <?php echo $documentdate->format("d.m.Y"); ?>
         </p>
         <p style="margin-top: 50px" class="bold">
-            Dear customer,
+            <?php echo $translator->translateWithoutPlaceholders('greeting', 'generaltexts') ?>,
         </p>
         <p>
-            We take the liberty of invoicing you for the following items
+            <?php echo $translator->translateWithoutPlaceholders('leadingtext1', 'generaltexts') ?>
         </p>
         <?php //$document->getDocumentNotes($documentNotes); ?>
         <?php //foreach ($documentNotes as $documentNote) { ?>
@@ -215,12 +215,12 @@
         <table class="postable">
             <thead>
                 <tr>
-                    <th class="posno">Pos.</th>
-                    <th class="posdesc">Description</th>
-                    <th class="posqty">Qty</th>
-                    <th class="posunitprice">Price</th>
-                    <th class="poslineamount">Amount</th>
-                    <th class="poslinevat">VAT %</th>
+                    <th class="posno"><?php echo $translator->translateWithoutPlaceholders('postableheader.posno', 'generaltexts') ?></th>
+                    <th class="posdesc"><?php echo $translator->translateWithoutPlaceholders('postableheader.description', 'generaltexts') ?></th>
+                    <th class="posqty"><?php echo $translator->translateWithoutPlaceholders('postableheader.quantity', 'generaltexts') ?></th>
+                    <th class="posunitprice"><?php echo $translator->translateWithoutPlaceholders('postableheader.price', 'generaltexts') ?></th>
+                    <th class="poslineamount"><?php echo $translator->translateWithoutPlaceholders('postableheader.linemount', 'generaltexts') ?></th>
+                    <th class="poslinevat"><?php echo $translator->translateWithoutPlaceholders('postableheader.vatpercent', 'generaltexts') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -248,7 +248,7 @@
                 <tr>
                     <td class="posno<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $lineid; ?></td>
                     <td class="posdesc<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $prodname; ?></td>
-                    <td class="posqty<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $billedquantity; ?> <?php echo $billedquantityunitcode ?></td>
+                    <td class="posqty<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo $billedquantity; ?> <?php echo $translator->translateWithoutPlaceholders($billedquantityunitcode, 'unitcodes') ?></td>
                     <td class="posunitprice<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo number_format($netpriceamount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                     <td class="poslineamount<?php echo $isfirstposition ? ' space' : '' ?>"><?php echo number_format($lineTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                     <?php if ($document->firstDocumentPositionTax()) { ?>
@@ -264,7 +264,7 @@
                     <?php $document->getDocumentPositionGrossPriceAllowanceCharge($actualAmount, $isCharge, $calculationPercent, $basisAmount, $reason, $taxTypeCode, $taxCategoryCode, $rateApplicablePercent, $sequence, $basisQuantity, $basisQuantityUnitCode, $reasonCode); ?>
                     <tr>
                         <td class="posno">&nbsp;</td>
-                        <td class="posdesc bold italic"><?php echo ($isCharge ? "Charge" : "Allowance") ?></td>
+                        <td class="posdesc bold italic"><?php echo ($isCharge ? $translator->translateWithoutPlaceholders('chargeindicator.charge', 'generaltexts') : $translator->translateWithoutPlaceholders('chargeindicator.allowance', 'generaltexts')) ?></td>
                         <td class="posqty">&nbsp;</td>
                         <td class="posunitprice italic"><?php echo number_format($actualAmount, 2); ?> (<?php echo number_format($grossAmount, 2); ?>) <?php echo $invoiceCurrency; ?></td>
                     </tr>
@@ -284,7 +284,7 @@
                 </tr>
                 <tr>
                     <td colspan="3">&nbsp;</td>
-                    <td colspan="3" class="bold fs-11 space">Allowance/Charge</td>
+                    <td colspan="3" class="bold fs-11 space"><?php echo $translator->translateWithoutPlaceholders('chargeindicator.allowance', 'generaltexts') ?>/<?php echo $translator->translateWithoutPlaceholders('chargeindicator.charge', 'generaltexts') ?></td>
                 </tr>
                 <?php $isFirstDocumentAllowanceCharge = true; ?>
                 <?php do { ?>
@@ -309,45 +309,45 @@
                 </tr>
                 <tr>
                     <td colspan="3">&nbsp;</td>
-                    <td colspan="3" class="bold fs-11 space">Totals</td>
+                    <td colspan="3" class="bold fs-11 space"><?php echo $translator->translateWithoutPlaceholders('totals.heading', 'generaltexts') ?></td>
                 </tr>
                 <tr>
                     <td class="space" colspan="3">&nbsp;</td>
-                    <td class="space totalname" colspan="2">Net Total</td>
+                    <td class="space totalname" colspan="2"><?php echo $translator->translateWithoutPlaceholders('totals.netamount', 'generaltexts') ?></td>
                     <td class="space totalvalue"><?php echo number_format($lineTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <?php if($chargeTotalAmount != 0) { ?>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname" colspan="2">Charge Total</td>
+                    <td class="totalname" colspan="2"><?php echo $translator->translateWithoutPlaceholders('totals.chargetotalamount', 'generaltexts') ?></td>
                     <td class="totalvalue"><?php echo number_format($chargeTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <?php } ?>
                 <?php if($allowanceTotalAmount != 0) { ?>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname" colspan="2">Allowance Total</td>
+                    <td class="totalname" colspan="2"><?php echo $translator->translateWithoutPlaceholders('totals.allowancetotalamount', 'generaltexts') ?></td>
                     <td class="totalvalue"><?php echo number_format($allowanceTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <?php } ?>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname" colspan="2">Tax</td>
+                    <td class="totalname" colspan="2"><?php echo $translator->translateWithoutPlaceholders('totals.taxtotalamount', 'generaltexts') ?></td>
                     <td class="totalvalue"><?php echo number_format($taxTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname bold" colspan="2">Gross Total</td>
+                    <td class="totalname bold" colspan="2"><?php echo $translator->translateWithoutPlaceholders('totals.grandtotalamount', 'generaltexts') ?></td>
                     <td class="totalvalue bold"><?php echo number_format($grandTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname bold" colspan="2">Already paid</td>
+                    <td class="totalname bold" colspan="2"><?php echo $translator->translateWithoutPlaceholders('totals.alreadypaid', 'generaltexts') ?></td>
                     <td class="totalvalue bold"><?php echo number_format($totalPrepaidAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname bold" colspan="2">Amount to pay</td>
+                    <td class="totalname bold" colspan="2"><?php echo $translator->translateWithoutPlaceholders('totals.amounttopay', 'generaltexts') ?></td>
                     <td class="totalvalue bold"><?php echo number_format($duePayableAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
 
@@ -361,7 +361,7 @@
                 </tr>
                 <tr>
                     <td colspan="3">&nbsp;</td>
-                    <td colspan="3" class="bold fs-11">VAT Breakdown</td>
+                    <td colspan="3" class="bold fs-11"><?php echo $translator->translateWithoutPlaceholders('vattotals.heading', 'generaltexts') ?></td>
                 </tr>
                 <?php $isfirsttax = true ?>
                 <?php $sumbasisamount = 0.0 ?>
@@ -378,7 +378,7 @@
                 <?php } while ($document->nextDocumentTax()); ?>
                 <tr>
                     <td class="" colspan="3">&nbsp;</td>
-                    <td class="totalname">Total</td>
+                    <td class="totalname"><?php echo $translator->translateWithoutPlaceholders('vattotals.heading2', 'generaltexts') ?></td>
                     <td class="totalvalue"><?php echo number_format($sumbasisamount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                     <td class="totalvalue bold"><?php echo number_format($taxTotalAmount, 2); ?> <?php echo $invoiceCurrency; ?></td>
                 </tr>
