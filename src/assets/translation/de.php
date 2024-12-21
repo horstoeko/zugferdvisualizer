@@ -4,6 +4,10 @@ return [
     'unitcodes' => [
     ],
     'documenttype' => [
+        '380' => 'Rechnung',
+        '381' => 'Gutschrift',
+        '384' => 'Rechnungskorrektur',
+        '386' => 'Vorauszahlungsrechnung',
     ],
     'generaltexts' => [
         'greeting' => 'Werter Kunde',

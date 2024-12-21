@@ -4,6 +4,10 @@ return [
     'unitcodes' => [
     ],
     'documenttype' => [
+        '380' => 'Invoice',
+        '381' => 'Credit Note',
+        '384' => 'Corrected Invoice',
+        '386' => 'Prepayment Invoice',
     ],
     'generaltexts' => [
         'greeting' => 'Dear customer',
