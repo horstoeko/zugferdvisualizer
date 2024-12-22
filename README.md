@@ -1,3 +1,4 @@
+<!-- omit in toc -->
 # ZUGFeRD/XRechnung/Factur-X Visualizer
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/horstoeko/zugferdvisualizer.svg?style=plastic)](https://packagist.org/packages/horstoeko/zugferdvisualizer)
@@ -7,26 +8,33 @@
 [![Build Status](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.ci.yml/badge.svg)](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.ci.yml)
 [![Release Status](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.release.yml/badge.svg)](https://github.com/horstoeko/zugferdvisualizer/actions/workflows/build.release.yml)
 
+<!-- omit in toc -->
 ## Table of Contents
 
-- [ZUGFeRD/XRechnung/Factur-X Visualizer](#zugferdxrechnungfactur-x-visualizer)
-  - [Table of Contents](#table-of-contents)
-  - [License](#license)
-  - [Overview](#overview)
-  - [Dependencies](#dependencies)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [Create HTML markup from existing invoice document (XML) using built-in template](#create-html-markup-from-existing-invoice-document-xml-using-built-in-template)
-    - [Create a PDF file from existing invoice document (XML) using built-in template](#create-a-pdf-file-from-existing-invoice-document-xml-using-built-in-template)
-    - [Create a PDF string from existing invoice document (XML) using built-in template](#create-a-pdf-string-from-existing-invoice-document-xml-using-built-in-template)
-    - [Create a PDF string from document builder and merge XML with generated PDF](#create-a-pdf-string-from-document-builder-and-merge-xml-with-generated-pdf)
+- [License](#license)
+- [Overview](#overview)
+- [Dependencies](#dependencies)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Create HTML markup from existing invoice document (XML) using built-in template](#create-html-markup-from-existing-invoice-document-xml-using-built-in-template)
+  - [Create a PDF file from existing invoice document (XML) using built-in template](#create-a-pdf-file-from-existing-invoice-document-xml-using-built-in-template)
+  - [Create a PDF string from existing invoice document (XML) using built-in template](#create-a-pdf-string-from-existing-invoice-document-xml-using-built-in-template)
+  - [Create a PDF string from document builder and merge XML with generated PDF](#create-a-pdf-string-from-document-builder-and-merge-xml-with-generated-pdf)
+  - [Renderer](#renderer)
     - [Create a custom renderer](#create-a-custom-renderer)
     - [Use a custom renderer](#use-a-custom-renderer)
     - [Use the built-in Laravel renderer](#use-the-built-in-laravel-renderer)
-    - [Set PDF-Options](#set-pdf-options)
-      - [Set options before instanciating the internal PDF-Engine (```setPdfPreInitCallback```)](#set-options-before-instanciating-the-internal-pdf-engine-setpdfpreinitcallback)
-      - [Set options after instanciating the internal PDF-Engine (```setPdfRuntimeInitCallback```)](#set-options-after-instanciating-the-internal-pdf-engine-setpdfruntimeinitcallback)
-      - [Working with custom fonts](#working-with-custom-fonts)
+  - [Translations](#translations)
+    - [How the translations work](#how-the-translations-work)
+    - [Use of the translator](#use-of-the-translator)
+    - [The default translator ZugferdVisualizerDefaultTranslator](#the-default-translator-zugferdvisualizerdefaulttranslator)
+    - [The Laravel translator ZugferdVisualizerLaravelTranslator](#the-laravel-translator-zugferdvisualizerlaraveltranslator)
+    - [Use of the translator in templates:](#use-of-the-translator-in-templates)
+  - [Set PDF-Options](#set-pdf-options)
+    - [Set options before instanciating the internal PDF-Engine (```setPdfPreInitCallback```)](#set-options-before-instanciating-the-internal-pdf-engine-setpdfpreinitcallback)
+    - [Set options after instanciating the internal PDF-Engine (```setPdfRuntimeInitCallback```)](#set-options-after-instanciating-the-internal-pdf-engine-setpdfruntimeinitcallback)
+    - [Working with custom fonts](#working-with-custom-fonts)
+
 
 ## License
 
@@ -132,7 +140,11 @@ $merger->generateDocument();
 $merger->saveDocument(dirname(__FILE__) . "/invoice_2.pdf");
 ```
 
-### Create a custom renderer
+### Renderer
+
+A renderer is the central instance for generating HTML markup from template files.
+
+#### Create a custom renderer
 
 If you want to implement your own markup renderer, then your class must implement the interface `ZugferdVisualizerMarkupRendererContract`. The interface defines two methods:
 
@@ -160,7 +172,7 @@ class MyOwnRenderer implements ZugferdVisualizerMarkupRendererContract
 }
 ```
 
-### Use a custom renderer
+#### Use a custom renderer
 
 ```php
 use horstoeko\zugferd\ZugferdDocumentReader;
@@ -177,7 +189,7 @@ $visualizer->setTemplate('/assets/myowntemplate.tmpl');
 echo $visualizer->renderMarkup();
 ```
 
-### Use the built-in Laravel renderer
+#### Use the built-in Laravel renderer
 
 The ```ZugferdVisualizerLaravelRenderer``` can be used within the Laravel-Framework:
 
@@ -220,6 +232,89 @@ class ZugferdController extends Controller
         return response()->download(storage_path('app/invoice_1.pdf'), "invoice_1.pdf", $headers);
     }
 }
+```
+
+### Translations
+
+Since version 1.0.10 it is possible to use translations. These are used to translate text and codes into readable text. These can be, for example, the Zugferd codes for units of measure or the document type codes.
+
+The translations are stored in translation files. These files are PHP source text files. The translations are organized in domains. The following domains are currently known and supported:
+
+* unitcodes
+* documenttype
+* generaltexts
+
+The basic structure of a translation file is as follows:
+
+```php
+<?php
+
+return [
+    'unitcodes' => [],
+    'documenttype' => ],
+    'generaltexts' => [],
+];
+```
+
+For the languages “German” and “English” are already supplied
+
+#### How the translations work
+
+By default, the class ``ZugferdVisualizerDefaultTranslator`` is used for translation. Similar to the ``ZugferdVisualizerLaravelRenderer`` for Laravel applications, a translation mechanism for Laravel is also available through the ``ZugferdVisualizerLaravelTranslator`` class. All translators implement the interface ``ZugferdVisualizerTranslatorContract`` which exclusively calls the following method ``translate`` with the following signature
+
+#### Use of the translator
+
+The translator is made known to the ``ZugferdVisualizer`` instance (similar to the renderer):
+
+```php
+$translator = new ZugferdVisualizerDefaultTranslator();
+$translator->......
+$visualizer = new ZugferdVisualizer($reader);
+$visualizer->setTranslator($translator);
+```
+
+If no translator is specified, the ``ZugferdVisualizerDefaultTranslator`` is used by default.
+
+#### The default translator ZugferdVisualizerDefaultTranslator
+
+The standard translator also offers the option of using your own translations. To do this, simply add the directory in which the translation files are located to the translator:
+
+```php
+$translator = new ZugferdVisualizerDefaultTranslator();
+$translator->addLanguageDirectory("/path/to/translation.files");
+```
+
+If you only want to use your own translations, it is sufficient to remove the default directories before adding your own directory:
+
+```php
+$translator = new ZugferdVisualizerDefaultTranslator();
+$translator->clearLanguageDirectories();
+$translator->addLanguageDirectory("/path/to/translation.files");
+```
+
+The language to be used can be set using the ``setCurrentLanguage`` method. A fallback language can also be set using ``setFallbackLanguage``. The fallback language is then used if no suitable translations were found for the default language:
+
+```php
+$translator = new ZugferdVisualizerDefaultTranslator();
+$translator->setCurrentLanguage('de-DE');
+$translator->setFallbackLanguage('en-US');
+```
+
+#### The Laravel translator ZugferdVisualizerLaravelTranslator
+
+The class ``ZugferdVisualizerLaravelTranslator`` is available for applications based on the Laravel framework:
+
+```php
+$translator = new ZugferdVisualizerLaravelTranslator();
+$translator->setCurrentLanguage('de');
+$visualizer = new ZugferdVisualizer($reader);
+$visualizer->setTranslator($translator);
+```
+
+#### Use of the translator in templates:
+
+```php
+<?php echo $translator->translate($documenttypecode, [], 'documenttype') ?>
 ```
 
 ### Set PDF-Options

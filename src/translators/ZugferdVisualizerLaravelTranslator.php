@@ -23,6 +23,27 @@ use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerTranslatorContract;
 class ZugferdVisualizerLaravelTranslator implements ZugferdVisualizerTranslatorContract
 {
     /**
+     * The currently selected language
+     *
+     * @var string
+     */
+    private $currentLanguage = 'en-US';
+
+    /**
+     * Sets the current language.
+     *
+     * @param  string $language
+     * @return ZugferdVisualizerLaravelTranslator
+     * @throws InvalidArgumentException
+     */
+    public function setCurrentLanguage(string $language): ZugferdVisualizerLaravelTranslator
+    {
+        $this->currentLanguage = $language;
+
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function translate(string $key, array $placeHolders = [], ?string $domain = null): string
@@ -35,6 +56,6 @@ class ZugferdVisualizerLaravelTranslator implements ZugferdVisualizerTranslatorC
             $key = rtrim(ltrim($domain, ". \t\n\r\0\x0B"), ". \t\n\r\0\x0B") . "." . rtrim(ltrim($key, ". \t\n\r\0\x0B"), ". \t\n\r\0\x0B");
         }
 
-        return call_user_func("trans", $key, $placeHolders);
+        return call_user_func("trans", $key, $placeHolders, $this->currentLanguage);
     }
 }
