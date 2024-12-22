@@ -33,7 +33,7 @@ return [
             'taxtotalamount' => 'Steuergesamtbetrag',
             'grandtotalamount' => 'Bruttogesamtbetrag',
             'alreadypaid' => 'Bereits bezahlt',
-            'amounttopay' => 'Fälliger Gesamtbtrag',
+            'amounttopay' => 'Fälliger Gesamtbetrag',
         ],
         'vattotals' => [
             'heading' => 'Steuer',
