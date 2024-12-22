@@ -122,11 +122,12 @@ class ZugferdVisualizer
      *
      * @param  ZugferdDocumentReader                        $documentReader
      * @param  ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @param  ZugferdVisualizerTranslatorContract|null     $translator
      * @return ZugferdVisualizer
      */
-    public static function fromDocumentReader(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null): ZugferdVisualizer
+    public static function fromDocumentReader(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null, ?ZugferdVisualizerTranslatorContract $translator = null): ZugferdVisualizer
     {
-        return new ZugferdVisualizer($documentReader, $renderer);
+        return new ZugferdVisualizer($documentReader, $renderer, $translator);
     }
 
     /**
@@ -134,29 +135,35 @@ class ZugferdVisualizer
      *
      * @param  ZugferdDocumentBuilder                       $documentBuilder
      * @param  ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @param  ZugferdVisualizerTranslatorContract|null     $translator
      * @return ZugferdVisualizer
      */
-    public static function fromDocumentBuilder(ZugferdDocumentBuilder $documentBuilder, ?ZugferdVisualizerMarkupRendererContract $renderer = null): ZugferdVisualizer
+    public static function fromDocumentBuilder(ZugferdDocumentBuilder $documentBuilder, ?ZugferdVisualizerMarkupRendererContract $renderer = null, ?ZugferdVisualizerTranslatorContract $translator = null): ZugferdVisualizer
     {
         $documentReader = ZugferdDocumentReader::readAndGuessFromContent($documentBuilder->getContent());
 
-        return static::fromDocumentReader($documentReader, $renderer);
+        return static::fromDocumentReader($documentReader, $renderer, $translator);
     }
 
     /**
      * Constructor
      *
      * @param      ZugferdDocumentReader                        $documentReader
-     * @param      null|ZugferdVisualizerMarkupRendererContract $renderer
+     * @param      ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @param      ZugferdVisualizerTranslatorContract|null     $translator
      * @return     void
      * @deprecated v2.0.0 Direct call of constructor will be removed in the future. Use static factory methods instead
      */
-    public function __construct(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null)
+    public function __construct(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null, ?ZugferdVisualizerTranslatorContract $translator = null)
     {
         $this->documentReader = $documentReader;
 
         if ($renderer) {
             $this->setRenderer($renderer);
+        }
+
+        if ($translator) {
+            $this->setTranslator($translator);
         }
     }
 
