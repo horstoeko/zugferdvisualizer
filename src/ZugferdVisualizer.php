@@ -15,9 +15,11 @@ use RuntimeException;
 use horstoeko\zugferd\ZugferdDocumentBuilder;
 use horstoeko\zugferd\ZugferdDocumentReader;
 use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract;
+use horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerTranslatorContract;
 use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateDefinedException;
 use horstoeko\zugferdvisualizer\exception\ZugferdVisualizerNoTemplateNotExistsException;
 use horstoeko\zugferdvisualizer\renderer\ZugferdVisualizerDefaultRenderer;
+use horstoeko\zugferdvisualizer\translators\ZugferdVisualizerDefaultTranslator;
 use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
 use Mpdf\Exception\AssetFetchingException;
@@ -51,6 +53,13 @@ class ZugferdVisualizer
      * @var \horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract
      */
     protected $renderer = null;
+
+    /**
+     * The translator to use
+     *
+     * @var \horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerTranslatorContract
+     */
+    protected $translator = null;
 
     /**
      * The template for the renderer to use
@@ -111,43 +120,50 @@ class ZugferdVisualizer
     /**
      * Factory for creating a visualizer by a ZugferdDocumentReader
      *
-     * @param ZugferdDocumentReader $documentReader
-     * @param ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @param  ZugferdDocumentReader                        $documentReader
+     * @param  ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @param  ZugferdVisualizerTranslatorContract|null     $translator
      * @return ZugferdVisualizer
      */
-    public static function fromDocumentReader(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null): ZugferdVisualizer
+    public static function fromDocumentReader(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null, ?ZugferdVisualizerTranslatorContract $translator = null): ZugferdVisualizer
     {
-        return new static($documentReader, $renderer);
+        return new ZugferdVisualizer($documentReader, $renderer, $translator);
     }
 
     /**
      * Factory for creating a visualizer by a ZugferdDocumentReader
      *
-     * @param ZugferdDocumentBuilder $documentBuilder
-     * @param ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @param  ZugferdDocumentBuilder                       $documentBuilder
+     * @param  ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @param  ZugferdVisualizerTranslatorContract|null     $translator
      * @return ZugferdVisualizer
      */
-    public static function fromDocumentBuilder(ZugferdDocumentBuilder $documentBuilder, ?ZugferdVisualizerMarkupRendererContract $renderer = null): ZugferdVisualizer
+    public static function fromDocumentBuilder(ZugferdDocumentBuilder $documentBuilder, ?ZugferdVisualizerMarkupRendererContract $renderer = null, ?ZugferdVisualizerTranslatorContract $translator = null): ZugferdVisualizer
     {
         $documentReader = ZugferdDocumentReader::readAndGuessFromContent($documentBuilder->getContent());
 
-        return static::fromDocumentReader($documentReader, $renderer);
+        return static::fromDocumentReader($documentReader, $renderer, $translator);
     }
 
     /**
      * Constructor
      *
-     * @param  ZugferdDocumentReader                        $documentReader
-     * @param  null|ZugferdVisualizerMarkupRendererContract $renderer
-     * @return void
+     * @param      ZugferdDocumentReader                        $documentReader
+     * @param      ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @param      ZugferdVisualizerTranslatorContract|null     $translator
+     * @return     void
      * @deprecated v2.0.0 Direct call of constructor will be removed in the future. Use static factory methods instead
      */
-    public function __construct(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null)
+    public function __construct(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null, ?ZugferdVisualizerTranslatorContract $translator = null)
     {
         $this->documentReader = $documentReader;
 
         if ($renderer) {
             $this->setRenderer($renderer);
+        }
+
+        if ($translator) {
+            $this->setTranslator($translator);
         }
     }
 
@@ -160,6 +176,17 @@ class ZugferdVisualizer
     public function setRenderer(ZugferdVisualizerMarkupRendererContract $renderer): void
     {
         $this->renderer = $renderer;
+    }
+
+    /**
+     * Setup the translator to use
+     *
+     * @param  ZugferdVisualizerTranslatorContract $translator
+     * @return void
+     */
+    public function setTranslator(ZugferdVisualizerTranslatorContract $translator): void
+    {
+        $this->translator = $translator;
     }
 
     /**
@@ -184,6 +211,18 @@ class ZugferdVisualizer
         $this->setTemplate(dirname(__FILE__) . "/template/default.tmpl");
     }
 
+
+    /**
+     * Sets the built-in template in an enhanced version (and switch the markup-rendering engine to the default renderer)
+     *
+     * @return void
+     */
+    public function setDefaultTemplateEnhanced(): void
+    {
+        $this->setRenderer(new ZugferdVisualizerDefaultRenderer());
+        $this->setTemplate(dirname(__FILE__) . "/template/default-enh.tmpl");
+    }
+
     /**
      * Add an additional directory where the PDF-Engine will
      * search for fonts
@@ -206,9 +245,9 @@ class ZugferdVisualizer
      * - Example 1: ``$visualizer->addPdfFont('frutiger', 'R', 'Frutiger-Normal.ttf')``
      * - Example 2: ``$visualizer->addPdfFont('frutiger', 'I', 'FrutigerObl-Normal.ttf')``
      *
-     * @param string $name
-     * @param string $style
-     * @param string $filename
+     * @param  string $name
+     * @param  string $style
+     * @param  string $filename
      * @return void
      */
     public function addPdfFontData(string $name, string $style, string $filename): void
@@ -274,10 +313,11 @@ class ZugferdVisualizer
     public function renderMarkup(): string
     {
         $this->testMustUseDefaultRenderer();
+        $this->testMustUseDefaultTranslator();
         $this->testTemplateIsSet();
         $this->testTemplateExists();
 
-        return $this->renderer->render($this->documentReader, $this->template);
+        return $this->renderer->render($this->documentReader, $this->translator, $this->template);
     }
 
     /**
@@ -353,6 +393,19 @@ class ZugferdVisualizer
     {
         if (!$this->renderer) {
             $this->setRenderer(new ZugferdVisualizerDefaultRenderer());
+        }
+    }
+
+    /**
+     * If no translator is specified the default translator is
+     * instanciated and used
+     *
+     * @return void
+     */
+    private function testMustUseDefaultTranslator(): void
+    {
+        if (!$this->translator) {
+            $this->setTranslator(new ZugferdVisualizerDefaultTranslator());
         }
     }
 

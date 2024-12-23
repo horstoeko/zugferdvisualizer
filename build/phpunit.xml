@@ -3,6 +3,7 @@
     <testsuites>
         <testsuite name="Basic">
             <file>../tests/testcases/BasicTest.php</file>
+            <file>../tests/testcases/DefaultTranslatorTest.php</file>
             <file>../tests/testcases/VisualizerText.php</file>
         </testsuite>
     </testsuites>
@@ -14,6 +15,7 @@
             <directory suffix=".php">../src/contracts</directory>
             <directory suffix=".php">../src/exception</directory>
             <file>../src/renderer/ZugferdVisualizerLaravelRenderer.php</file>
+            <file>../src/translators/ZugferdVisualizerLaravelTranslator.php</file>
         </exclude>
         <report>
             <xml outputDirectory="coverage"/>

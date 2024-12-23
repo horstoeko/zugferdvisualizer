@@ -33,6 +33,16 @@
             td {
                 font-size: 8pt;
             }
+            table.docheadertable {
+                width: 100%;
+                min-width: 100%;
+                max-width: 100%;
+                margin-top: 5px;
+            }
+            table.docheadertable th {
+                padding-bottom: 2px;
+                text-align: left;
+            }
             table.postable {
                 width: 100%;
                 min-width: 100%;
@@ -186,18 +196,40 @@
             $document->getDocumentInformation($documentno, $documenttypecode, $documentdate, $invoiceCurrency, $taxCurrency, $documentname, $documentlanguage, $effectiveSpecifiedPeriod);
             $document->getDocumentBuyer($buyername, $buyerids, $buyerdescription);
             $document->getDocumentBuyerAddress($buyeraddressline1, $buyeraddressline2, $buyeraddressline3, $buyerpostcode, $buyercity, $buyercounty, $buyersubdivision);
+            $document->getDocumentBuyerOrderReferencedDocument($bt13, $btX147);
+            $document->getDocumentBuyerReference($buyerRef);
+            $document->getDocumentSupplyChainEvent($bt72);
             $dateFormat = $translator->translateWithoutPlaceholders('formats.date', 'generaltexts')
         ?>
         <p>
             <?= implode('<br/>', array_filter([$buyername, $buyeraddressline1, $buyeraddressline2, $buyeraddressline3, $buyercounty . ' ' . $buyerpostcode . ' ' . $buyercity])); ?>
         </p>
         <h1 style="margin: 0; padding: 0; margin-top: 50px">
-            <?= $translator->translateWithoutPlaceholders($documenttypecode, 'documenttype') ?> <?= $documentno; ?>
+            <?= $translator->translateWithoutPlaceholders($documenttypecode, 'documenttype') ?>
         </h1>
-        <p style="margin: 0; padding: 0">
-            <?= $translator->translateWithoutPlaceholders('documentdate', 'generaltexts') ?> <?= $documentdate->format($dateFormat); ?>
+        <p>
+            <table class="docheadertable">
+                <thead>
+                    <tr>
+                        <th><?= $translator->translateWithoutPlaceholders('documentdate', 'generaltexts') ?></th>
+                        <th><?= $translator->translateWithoutPlaceholders('deliverydate', 'generaltexts') ?></th>
+                        <th><?= $translator->translateWithoutPlaceholders('documentno', 'generaltexts') ?></th>
+                        <th><?= $translator->translateWithoutPlaceholders('customerno', 'generaltexts') ?></th>
+                        <th><?= $translator->translateWithoutPlaceholders('reference', 'generaltexts') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?= $documentdate->format($dateFormat); ?></td>
+                        <td><?= $bt72 ? $bt72->format($dateFormat) : $documentdate->format($dateFormat); ?></td>
+                        <td><?= $documentno; ?></td>
+                        <td><?= implode(', ',$buyerids); ?></td>
+                        <td><?= $bt13; ?></td>
+                    </tr>
+                </tbody>
+            </table>
         </p>
-        <p style="margin-top: 50px" class="bold">
+        <p style="margin-top: 25px" class="bold">
             <?= $translator->translateWithoutPlaceholders('greeting', 'generaltexts') ?>,
         </p>
         <p>
