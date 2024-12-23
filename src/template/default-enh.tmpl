@@ -202,7 +202,7 @@
             $dateFormat = $translator->translateWithoutPlaceholders('formats.date', 'generaltexts')
         ?>
         <p>
-            <?= implode('<br/>',array_filter([$buyername, $buyeraddressline1, $buyeraddressline2, $buyeraddressline3, $buyercounty . ' ' . $buyerpostcode . ' ' . $buyercity])); ?>
+            <?= implode('<br/>', array_filter([$buyername, $buyeraddressline1, $buyeraddressline2, $buyeraddressline3, $buyercounty . ' ' . $buyerpostcode . ' ' . $buyercity])); ?>
         </p>
         <h1 style="margin: 0; padding: 0; margin-top: 50px">
             <?= $translator->translateWithoutPlaceholders($documenttypecode, 'documenttype') ?>
@@ -216,7 +216,6 @@
                         <th><?= $translator->translateWithoutPlaceholders('documentno', 'generaltexts') ?></th>
                         <th><?= $translator->translateWithoutPlaceholders('customerno', 'generaltexts') ?></th>
                         <th><?= $translator->translateWithoutPlaceholders('reference', 'generaltexts') ?></th>
-                        <th><?= $translator->translateWithoutPlaceholders('routingid', 'generaltexts') ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -226,12 +225,11 @@
                         <td><?= $documentno; ?></td>
                         <td><?= implode(', ',$buyerids); ?></td>
                         <td><?= $bt13; ?></td>
-                        <td><?= $buyerRef; ?></td>
                     </tr>
                 </tbody>
             </table>
         </p>
-        <p style="margin-top: 50px" class="bold">
+        <p style="margin-top: 25px" class="bold">
             <?= $translator->translateWithoutPlaceholders('greeting', 'generaltexts') ?>,
         </p>
         <p>
