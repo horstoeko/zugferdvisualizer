@@ -211,6 +211,18 @@ class ZugferdVisualizer
         $this->setTemplate(dirname(__FILE__) . "/template/default.tmpl");
     }
 
+
+    /**
+     * Sets the built-in template in an enhanced version (and switch the markup-rendering engine to the default renderer)
+     *
+     * @return void
+     */
+    public function setDefaultTemplateEnhanced(): void
+    {
+        $this->setRenderer(new ZugferdVisualizerDefaultRenderer());
+        $this->setTemplate(dirname(__FILE__) . "/template/default-enh.tmpl");
+    }
+
     /**
      * Add an additional directory where the PDF-Engine will
      * search for fonts

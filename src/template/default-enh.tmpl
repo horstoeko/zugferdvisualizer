@@ -1,0 +1,431 @@
+<html>
+    <head>
+        <style>
+            @page {
+                size: 21cm 29cm;
+                margin-left: 2.5cm;
+            }
+            body {
+                font-size: 9pt;
+            }
+            h1 {
+                font-size: 19px;
+            }
+            table {
+                margin: 0;
+                padding: 0;
+                table-layout: fixed;
+            }
+            tr {
+                margin: 0;
+                padding: 0;
+            }
+            th, td {
+                vertical-align: top;
+            }
+            th {
+                margin-left: 0;
+                margin-right: 0;
+                padding-left: 0;
+                padding-right: 0;
+                font-size: 8pt;
+            }
+            td {
+                font-size: 8pt;
+            }
+            table.docheadertable {
+                width: 100%;
+                min-width: 100%;
+                max-width: 100%;
+                margin-top: 5px;
+            }
+            table.docheadertable th {
+                padding-bottom: 2px;
+                text-align: left;
+            }
+            table.postable {
+                width: 100%;
+                min-width: 100%;
+                max-width: 100%;
+                margin-top: 5px;
+            }
+            table.postable th {
+                padding-bottom: 10px;
+            }
+            table.postable td.posno,
+            table.postable th.posno {
+                width: 10%;
+                min-width: 10%;
+                max-width: 10%;
+                text-align: left;
+            }
+            table.postable td.posdesc,
+            table.postable th.posdesc {
+                width: 25%;
+                min-width: 25%;
+                max-width: 25%;
+                text-align: left;
+            }
+            table.postable td.posqty,
+            table.postable th.posqty {
+                width: 20%;
+                min-width: 20%;
+                max-width: 20%;
+                text-align: right;
+            }
+            table.postable td.posunitprice,
+            table.postable th.posunitprice {
+                width: 20%;
+                min-width: 20%;
+                max-width: 20%;
+                text-align: right;
+            }
+            table.postable td.poslineamount,
+            table.postable th.poslineamount {
+                width: 20%;
+                min-width: 20%;
+                max-width: 20%;
+                text-align: right;
+            }
+            table.postable td.poslinevat,
+            table.postable th.poslinevat {
+                width: 5%;
+                min-width: 5%;
+                max-width: 5%;
+                text-align: right;
+            }
+            table.postable th.posno {
+                border-bottom: 1px solid #dcdcdc;
+            }
+            table.postable th.posdesc {
+                border-bottom: 1px solid #dcdcdc;
+            }
+            table.postable th.posqty {
+                border-bottom: 1px solid #dcdcdc;
+            }
+            table.postable th.posunitprice {
+                border-bottom: 1px solid #dcdcdc;
+            }
+            table.postable th.poslineamount {
+                border-bottom: 1px solid #dcdcdc;
+            }
+            table.postable th.poslinevat {
+                border-bottom: 1px solid #dcdcdc;
+            }
+            table.postable td.totalname {
+                width: 20%;
+                min-width: 20%;
+                max-width: 20%;
+                text-align: left;
+                border-bottom: 1px solid #dcdcdc;
+            }
+            table.postable td.totalvalue {
+                width: 20%;
+                min-width: 20%;
+                max-width: 20%;
+                text-align: right;
+                border-bottom: 1px solid #dcdcdc;
+            }
+            .space {
+                padding-top: 10px;
+            }
+            .space2 {
+                padding-top: 20px;
+            }
+            .space3 {
+                padding-top: 30px;
+            }
+            .bold {
+                font-weight: bold;
+            }
+            .italic {
+                font-style: italic;
+            }
+            .red {
+                color: #ff0000;
+            }
+            .green {
+                color: #00fff0
+            }
+            .mt-15 {
+                margin-top: 15px;
+            }
+            .mt-20 {
+                margin-top: 20px;
+            }
+            .mt-25 {
+                margin-top: 25px;
+            }
+            .mt-30 {
+                margin-top: 30px;
+            }
+            .pt-15 {
+                padding-top: 15px;
+            }
+            .pt-20 {
+                padding-top: 20px;
+            }
+            .pt-25 {
+                padding-top: 25px;
+            }
+            .pt-30 {
+                padding-top: 30px;
+            }
+            .fs-10 {
+                font-size: 10pt;
+            }
+            .fs-11 {
+                font-size: 11pt;
+            }
+            .fs-12 {
+                font-size: 12pt;
+            }
+            .fs-13 {
+                font-size: 13pt;
+            }
+            .fs-14 {
+                font-size: 14pt;
+            }
+            .pb-0 {
+                padding-bottom: 0px;
+            }
+        </style>
+    </head>
+    <body>
+        <?php
+            $document->getDocumentInformation($documentno, $documenttypecode, $documentdate, $invoiceCurrency, $taxCurrency, $documentname, $documentlanguage, $effectiveSpecifiedPeriod);
+            $document->getDocumentBuyer($buyername, $buyerids, $buyerdescription);
+            $document->getDocumentBuyerAddress($buyeraddressline1, $buyeraddressline2, $buyeraddressline3, $buyerpostcode, $buyercity, $buyercounty, $buyersubdivision);
+            $document->getDocumentBuyerOrderReferencedDocument($bt13, $btX147);
+            $document->getDocumentBuyerReference($buyerRef);
+            $document->getDocumentSupplyChainEvent($bt72);
+            $dateFormat = $translator->translateWithoutPlaceholders('formats.date', 'generaltexts')
+        ?>
+        <p>
+            <?= implode('<br/>',array_filter([$buyername, $buyeraddressline1, $buyeraddressline2, $buyeraddressline3, $buyercounty . ' ' . $buyerpostcode . ' ' . $buyercity])); ?>
+        </p>
+        <h1 style="margin: 0; padding: 0; margin-top: 50px">
+            <?= $translator->translateWithoutPlaceholders($documenttypecode, 'documenttype') ?>
+        </h1>
+        <p>
+            <table class="docheadertable">
+                <thead>
+                    <tr>
+                        <th><?= $translator->translateWithoutPlaceholders('documentdate', 'generaltexts') ?></th>
+                        <th><?= $translator->translateWithoutPlaceholders('deliverydate', 'generaltexts') ?></th>
+                        <th><?= $translator->translateWithoutPlaceholders('documentno', 'generaltexts') ?></th>
+                        <th><?= $translator->translateWithoutPlaceholders('customerno', 'generaltexts') ?></th>
+                        <th><?= $translator->translateWithoutPlaceholders('reference', 'generaltexts') ?></th>
+                        <th><?= $translator->translateWithoutPlaceholders('routingid', 'generaltexts') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?= $documentdate->format($dateFormat); ?></td>
+                        <td><?= $bt72 ? $bt72->format($dateFormat) : $documentdate->format($dateFormat); ?></td>
+                        <td><?= $documentno; ?></td>
+                        <td><?= implode(', ',$buyerids); ?></td>
+                        <td><?= $bt13; ?></td>
+                        <td><?= $buyerRef; ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </p>
+        <p style="margin-top: 50px" class="bold">
+            <?= $translator->translateWithoutPlaceholders('greeting', 'generaltexts') ?>,
+        </p>
+        <p>
+            <?= $translator->translateWithoutPlaceholders('leadingtext1', 'generaltexts') ?>
+        </p>
+        <table class="postable">
+            <thead>
+                <tr>
+                    <th class="posno"><?= $translator->translateWithoutPlaceholders('postableheader.posno', 'generaltexts') ?></th>
+                    <th class="posdesc"><?= $translator->translateWithoutPlaceholders('postableheader.description', 'generaltexts') ?></th>
+                    <th class="posqty"><?= $translator->translateWithoutPlaceholders('postableheader.quantity', 'generaltexts') ?></th>
+                    <th class="posunitprice"><?= $translator->translateWithoutPlaceholders('postableheader.price', 'generaltexts') ?></th>
+                    <th class="poslineamount"><?= $translator->translateWithoutPlaceholders('postableheader.linemount', 'generaltexts') ?></th>
+                    <th class="poslinevat"><?= $translator->translateWithoutPlaceholders('postableheader.vatpercent', 'generaltexts') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ($document->firstDocumentPosition()) {
+                $isfirstposition = true;
+                do {
+                    $document->getDocumentPositionGenerals($lineid, $linestatuscode, $linestatusreasoncode);
+                    $document->getDocumentPositionProductDetails($prodname, $proddesc, $prodsellerid, $prodbuyerid, $prodglobalidtype, $prodglobalid);
+                    $document->getDocumentPositionGrossPrice($grosspriceamount, $grosspricebasisquantity, $grosspricebasisquantityunitcode);
+                    $document->getDocumentPositionNetPrice($netpriceamount, $netpricebasisquantity, $netpricebasisquantityunitcode);
+                    $document->getDocumentPositionLineSummation($lineTotalAmount, $totalAllowanceChargeAmount);
+                    $document->getDocumentPositionQuantity($billedquantity, $billedquantityunitcode, $chargeFreeQuantity, $chargeFreeQuantityunitcode, $packageQuantity, $packageQuantityunitcode);
+                ?>
+                <?php if ($document->firstDocumentPositionNote()) { ?>
+                    <tr>
+                        <td class="<?= $isfirstposition ? ' space' : '' ?>">&nbsp;</td>
+                        <td colspan="5" class="<?= $isfirstposition ? ' space' : '' ?>">
+                            <?php $document->getDocumentPositionNote($posnoteContent, $posnoteContentCode, $posnoteSubjectCode); ?>
+                            <?= $posnoteContent; ?>
+                            <?php $isfirstposition = false; ?>
+                        </td>
+                    </tr>
+                <?php } while ($document->nextDocumentPositionNote()); ?>
+                <tr>
+                    <td class="posno<?= $isfirstposition ? ' space' : '' ?>"><?= $lineid; ?></td>
+                    <td class="posdesc<?= $isfirstposition ? ' space' : '' ?>"><?= $prodname; ?></td>
+                    <td class="posqty<?= $isfirstposition ? ' space' : '' ?>"><?= $billedquantity; ?> <?= $translator->translateWithoutPlaceholders($billedquantityunitcode, 'unitcodes') ?></td>
+                    <td class="posunitprice<?= $isfirstposition ? ' space' : '' ?>"><?= number_format($netpriceamount, 2); ?> <?= $invoiceCurrency; ?></td>
+                    <td class="poslineamount<?= $isfirstposition ? ' space' : '' ?>"><?= number_format($lineTotalAmount, 2); ?> <?= $invoiceCurrency; ?></td>
+                    <?php if ($document->firstDocumentPositionTax()) { ?>
+                        <?php $document->getDocumentPositionTax($categoryCode, $typeCode, $rateApplicablePercent, $calculatedAmount, $exemptionReason, $exemptionReasonCode); ?>
+                        <td class="poslinevat<?= $isfirstposition ? ' space' : '' ?>"><?= number_format($rateApplicablePercent, 2); ?> %</td>
+                    <?php } else { ?>
+                        <td class="poslinevat<?= $isfirstposition ? ' space' : '' ?>">&nbsp;</td>
+                    <?php } ?>
+                </tr>
+                <?php if ($document->firstDocumentPositionGrossPriceAllowanceCharge()) { ?>
+                    <?php do { ?>
+                    <?php $document->getDocumentPositionGrossPrice($grossAmount, $grossBasisQuantity, $grossBasisQuantityUnitCode); ?>
+                    <?php $document->getDocumentPositionGrossPriceAllowanceCharge($actualAmount, $isCharge, $calculationPercent, $basisAmount, $reason, $taxTypeCode, $taxCategoryCode, $rateApplicablePercent, $sequence, $basisQuantity, $basisQuantityUnitCode, $reasonCode); ?>
+                    <tr>
+                        <td class="posno">&nbsp;</td>
+                        <td class="posdesc bold italic"><?= ($isCharge ? $translator->translateWithoutPlaceholders('chargeindicator.charge', 'generaltexts') : $translator->translateWithoutPlaceholders('chargeindicator.allowance', 'generaltexts')) ?></td>
+                        <td class="posqty">&nbsp;</td>
+                        <td class="posunitprice italic"><?= number_format($actualAmount, 2); ?> (<?= number_format($grossAmount, 2); ?>) <?= $invoiceCurrency; ?></td>
+                    </tr>
+                    <?php } while ($document->nextDocumentPositionGrossPriceAllowanceCharge()); ?>
+                <?php } ?>
+                <?php $isfirstposition = false; ?>
+                <?php } while ($document->nextDocumentPosition()); ?>
+                <?php } ?>
+
+                <!--
+                    Allowance/Charge
+                -->
+
+                <?php if ($document->firstDocumentAllowanceCharge()) { ?>
+                <tr>
+                    <td colspan="6">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="3">&nbsp;</td>
+                    <td colspan="3" class="bold fs-11 space"><?= $translator->translateWithoutPlaceholders('chargeindicator.allowance', 'generaltexts') ?>/<?= $translator->translateWithoutPlaceholders('chargeindicator.charge', 'generaltexts') ?></td>
+                </tr>
+                <?php $isFirstDocumentAllowanceCharge = true; ?>
+                <?php do { ?>
+                <?php $document->getDocumentAllowanceCharge($actualAmount, $isCharge, $taxCategoryCode, $taxTypeCode, $rateApplicablePercent, $sequence, $calculationPercent, $basisAmount, $basisQuantity, $basisQuantityUnitCode, $reasonCode, $reason); ?>
+                <tr>
+                <td class="<?= $isFirstDocumentAllowanceCharge ? 'space' : ''; ?>" colspan="3">&nbsp;</td>
+                <td class="<?= $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalname"><?= $reason ? $reason : ($isCharge ? "Charge" : "Allowance"); ?></td>
+                <td class="<?= $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalvalue"><?= number_format($basisAmount, 2); ?> <?= $invoiceCurrency; ?></td>
+                <td class="<?= $isFirstDocumentAllowanceCharge ? 'space' : ''; ?> totalvalue bold"><?= number_format($actualAmount, 2); ?> <?= $invoiceCurrency; ?></td>
+                </tr>
+                <?php $isFirstDocumentAllowanceCharge = false; ?>
+                <?php } while ($document->nextDocumentAllowanceCharge()); ?>
+                <?php } ?>
+
+                <!--
+                    Summmation
+                -->
+
+                <?php $document->getDocumentSummation($grandTotalAmount, $duePayableAmount, $lineTotalAmount, $chargeTotalAmount, $allowanceTotalAmount, $taxBasisTotalAmount, $taxTotalAmount, $roundingAmount, $totalPrepaidAmount); ?>
+                <tr>
+                    <td colspan="6">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="3">&nbsp;</td>
+                    <td colspan="3" class="bold fs-11 space"><?= $translator->translateWithoutPlaceholders('totals.heading', 'generaltexts') ?></td>
+                </tr>
+                <tr>
+                    <td class="space" colspan="3">&nbsp;</td>
+                    <td class="space totalname" colspan="2"><?= $translator->translateWithoutPlaceholders('totals.netamount', 'generaltexts') ?></td>
+                    <td class="space totalvalue"><?= number_format($lineTotalAmount, 2); ?> <?= $invoiceCurrency; ?></td>
+                </tr>
+                <?php if($chargeTotalAmount != 0) { ?>
+                <tr>
+                    <td class="" colspan="3">&nbsp;</td>
+                    <td class="totalname" colspan="2"><?= $translator->translateWithoutPlaceholders('totals.chargetotalamount', 'generaltexts') ?></td>
+                    <td class="totalvalue"><?= number_format($chargeTotalAmount, 2); ?> <?= $invoiceCurrency; ?></td>
+                </tr>
+                <?php } ?>
+                <?php if($allowanceTotalAmount != 0) { ?>
+                <tr>
+                    <td class="" colspan="3">&nbsp;</td>
+                    <td class="totalname" colspan="2"><?= $translator->translateWithoutPlaceholders('totals.allowancetotalamount', 'generaltexts') ?></td>
+                    <td class="totalvalue"><?= number_format($allowanceTotalAmount, 2); ?> <?= $invoiceCurrency; ?></td>
+                </tr>
+                <?php } ?>
+                <tr>
+                    <td class="" colspan="3">&nbsp;</td>
+                    <td class="totalname" colspan="2"><?= $translator->translateWithoutPlaceholders('totals.taxtotalamount', 'generaltexts') ?></td>
+                    <td class="totalvalue"><?= number_format($taxTotalAmount, 2); ?> <?= $invoiceCurrency; ?></td>
+                </tr>
+                <tr>
+                    <td class="" colspan="3">&nbsp;</td>
+                    <td class="totalname bold" colspan="2"><?= $translator->translateWithoutPlaceholders('totals.grandtotalamount', 'generaltexts') ?></td>
+                    <td class="totalvalue bold"><?= number_format($grandTotalAmount, 2); ?> <?= $invoiceCurrency; ?></td>
+                </tr>
+                <tr>
+                    <td class="" colspan="3">&nbsp;</td>
+                    <td class="totalname bold" colspan="2"><?= $translator->translateWithoutPlaceholders('totals.alreadypaid', 'generaltexts') ?></td>
+                    <td class="totalvalue bold"><?= number_format($totalPrepaidAmount, 2); ?> <?= $invoiceCurrency; ?></td>
+                </tr>
+                <tr>
+                    <td class="" colspan="3">&nbsp;</td>
+                    <td class="totalname bold" colspan="2"><?= $translator->translateWithoutPlaceholders('totals.amounttopay', 'generaltexts') ?></td>
+                    <td class="totalvalue bold"><?= number_format($duePayableAmount, 2); ?> <?= $invoiceCurrency; ?></td>
+                </tr>
+
+                <!--
+                    VAT Summation
+                -->
+
+                <?php if($document->firstDocumentTax()) { ?>
+                <tr>
+                    <td colspan="6">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="3">&nbsp;</td>
+                    <td colspan="3" class="bold fs-11"><?= $translator->translateWithoutPlaceholders('vattotals.heading', 'generaltexts') ?></td>
+                </tr>
+                <?php $isfirsttax = true ?>
+                <?php $sumbasisamount = 0.0 ?>
+                <?php do { ?>
+                <?php $document->getDocumentTax($categoryCode, $typeCode, $basisAmount, $calculatedAmount, $rateApplicablePercent, $exemptionReason, $exemptionReasonCode, $lineTotalBasisAmount, $allowanceChargeBasisAmount, $taxPointDate, $dueDateTypeCode); ?>
+                <tr>
+                    <td class="<?= $isfirsttax ? 'space' : '' ?>" colspan="3">&nbsp;</td>
+                    <td class="totalname<?= $isfirsttax ? ' space' : '' ?>"><?= number_format($rateApplicablePercent, 2); ?>%</td>
+                    <td class="totalvalue<?= $isfirsttax ? ' space' : '' ?>"><?= number_format($basisAmount,2) ?> <?= $invoiceCurrency; ?></td>
+                    <td class="totalvalue bold<?= $isfirsttax ? ' space' : '' ?>"><?= number_format($calculatedAmount, 2); ?> <?= $invoiceCurrency; ?></td>
+                </tr>
+                <?php $sumbasisamount = $sumbasisamount + $basisAmount ?>
+                <?php $isfirsttax = false ?>
+                <?php } while ($document->nextDocumentTax()); ?>
+                <tr>
+                    <td class="" colspan="3">&nbsp;</td>
+                    <td class="totalname"><?= $translator->translateWithoutPlaceholders('vattotals.heading2', 'generaltexts') ?></td>
+                    <td class="totalvalue"><?= number_format($sumbasisamount, 2); ?> <?= $invoiceCurrency; ?></td>
+                    <td class="totalvalue bold"><?= number_format($taxTotalAmount, 2); ?> <?= $invoiceCurrency; ?></td>
+                </tr>
+                <?php } ?>
+
+                <!--
+                    Paymentterms
+                -->
+
+                <?php if ($document->firstDocumentPaymentTerms()) { ?>
+                <?php $isfirstpaymentterm = true ?>
+                <?php do { ?>
+                <tr>
+                    <?php $document->getDocumentPaymentTerm($description, $dueDate, $directDebitMandateID); ?>
+                    <td colspan="6" class="<?= $isfirstpaymentterm ? 'space3' : '' ?>">
+                        <?= $description; ?>
+                    </td>
+                </tr>
+                <?php $isfirstpaymentterm = false ?>
+                <?php } while ($document->nextDocumentPaymentTerms()); ?>
+                <?php } ?>
+            </tbody>
+        </table>
+    </body>
+</html>
