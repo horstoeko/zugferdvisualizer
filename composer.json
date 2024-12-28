@@ -49,6 +49,7 @@
         "phpunit/phpunit": "^9",
         "rector/rector": "*",
         "sebastian/phpcpd": "^6",
+        "horstoeko/stringmanagement": "^1",
         "squizlabs/php_codesniffer": "^3"
     },
     "scripts": {
