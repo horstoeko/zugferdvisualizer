@@ -1,3 +1,20 @@
+## v1.0.10
+
+``Previous version v1.0.9``
+
+| Type | Hash    | Date    | Author  | Subject  | Issue(s)
+| :--- | :------ | :------ | :------ | :------- | :-----------: 
+| :new_moon:  | [6c61a03](https://github.com/horstoeko/zugferdvisualizer/commit/6c61a03) | 2025-01-17 11:51:56 CET | HorstOeko | Merged PR | [#10](https://github.com/horstoeko/zugferdvisualizer/issues/10)
+| :bug:  | [79bedd4](https://github.com/horstoeko/zugferdvisualizer/commit/79bedd4) | 2025-01-17 11:48:51 CET | HorstOeko | [FIX]  Fix dompdf/dompdf version constraint | [#9](https://github.com/horstoeko/zugferdvisualizer/issues/9)
+| :new_moon:  | [e11156a](https://github.com/horstoeko/zugferdvisualizer/commit/e11156a) | 2024-12-18 17:02:35 CET | HorstOeko | Revert "fix translation" | 
+| :new_moon:  | [4993324](https://github.com/horstoeko/zugferdvisualizer/commit/4993324) | 2024-12-18 16:28:13 CET | HorstOeko | Merged PR | [#5](https://github.com/horstoeko/zugferdvisualizer/issues/5)
+| :new_moon:  | [eb4bc43](https://github.com/horstoeko/zugferdvisualizer/commit/eb4bc43) | 2024-12-18 16:13:02 CET | Marc Krämer | fix translation | 
+| :new_moon:  | [6d15dd8](https://github.com/horstoeko/zugferdvisualizer/commit/6d15dd8) | 2024-12-18 15:02:38 CET | Marc Krämer | added german translation and basic transform code for units | 
+| :new_moon:  | [2b51990](https://github.com/horstoeko/zugferdvisualizer/commit/2b51990) | 2024-11-19 12:24:20 CET | HorstOeko | Fix code style | 
+| :new_moon:  | [3e8c71f](https://github.com/horstoeko/zugferdvisualizer/commit/3e8c71f) | 2024-11-19 12:23:45 CET | HorstOeko | Added factory methods "fromDocumentReader" and "fromDocumentBuilder" for easier access, Fixed codestyle (PHPCS, PHPStan) | 
+
+:exclamation: _There are 10 internal commit(s)_
+
 ## v1.0.9
 
 ``Previous version v1.0.8``
