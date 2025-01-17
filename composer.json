@@ -31,7 +31,7 @@
         "php": ">=7.3",
         "ext-dom": "*",
         "ext-mbstring": "*",
-        "dompdf/dompdf": "^2.0",
+        "dompdf/dompdf": "^2|^3",
         "horstoeko/zugferd": "^1",
         "league/commonmark": "^1|^2",
         "mpdf/mpdf": "^8"
