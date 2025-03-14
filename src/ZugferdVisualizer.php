@@ -43,14 +43,14 @@ class ZugferdVisualizer
      *
      * @var \horstoeko\zugferd\ZugferdDocumentReader
      */
-    protected $documentReader = null;
+    protected $documentReader;
 
     /**
      * The renderer to use
      *
      * @var \horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract
      */
-    protected $renderer = null;
+    protected $renderer;
 
     /**
      * The template for the renderer to use
@@ -98,7 +98,7 @@ class ZugferdVisualizer
      *
      * @var callable|null
      */
-    protected $mpdfPreInitCallback = null;
+    protected $mpdfPreInitCallback;
 
     /**
      * A callbacl which is called after MPDF is instanciated. Here
@@ -106,13 +106,13 @@ class ZugferdVisualizer
      *
      * @var callable|null
      */
-    protected $mpdfRuntimeInitCallback = null;
+    protected $mpdfRuntimeInitCallback;
 
     /**
      * Factory for creating a visualizer by a ZugferdDocumentReader
      *
-     * @param ZugferdDocumentReader $documentReader
-     * @param ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @param  ZugferdDocumentReader                        $documentReader
+     * @param  ZugferdVisualizerMarkupRendererContract|null $renderer
      * @return ZugferdVisualizer
      */
     public static function fromDocumentReader(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null): ZugferdVisualizer
@@ -123,8 +123,8 @@ class ZugferdVisualizer
     /**
      * Factory for creating a visualizer by a ZugferdDocumentReader
      *
-     * @param ZugferdDocumentBuilder $documentBuilder
-     * @param ZugferdVisualizerMarkupRendererContract|null $renderer
+     * @param  ZugferdDocumentBuilder                       $documentBuilder
+     * @param  ZugferdVisualizerMarkupRendererContract|null $renderer
      * @return ZugferdVisualizer
      */
     public static function fromDocumentBuilder(ZugferdDocumentBuilder $documentBuilder, ?ZugferdVisualizerMarkupRendererContract $renderer = null): ZugferdVisualizer
@@ -137,16 +137,16 @@ class ZugferdVisualizer
     /**
      * Constructor
      *
-     * @param  ZugferdDocumentReader                        $documentReader
-     * @param  null|ZugferdVisualizerMarkupRendererContract $renderer
-     * @return void
+     * @param      ZugferdDocumentReader                        $documentReader
+     * @param      null|ZugferdVisualizerMarkupRendererContract $renderer
+     * @return     void
      * @deprecated v2.0.0 Direct call of constructor will be removed in the future. Use static factory methods instead
      */
     public function __construct(ZugferdDocumentReader $documentReader, ?ZugferdVisualizerMarkupRendererContract $renderer = null)
     {
         $this->documentReader = $documentReader;
 
-        if ($renderer) {
+        if ($renderer instanceof \horstoeko\zugferdvisualizer\contracts\ZugferdVisualizerMarkupRendererContract) {
             $this->setRenderer($renderer);
         }
     }
@@ -181,7 +181,7 @@ class ZugferdVisualizer
     public function setDefaultTemplate(): void
     {
         $this->setRenderer(new ZugferdVisualizerDefaultRenderer());
-        $this->setTemplate(dirname(__FILE__) . "/template/default.tmpl");
+        $this->setTemplate(__DIR__ . "/template/default.tmpl");
     }
 
     /**
@@ -206,9 +206,9 @@ class ZugferdVisualizer
      * - Example 1: ``$visualizer->addPdfFont('frutiger', 'R', 'Frutiger-Normal.ttf')``
      * - Example 2: ``$visualizer->addPdfFont('frutiger', 'I', 'FrutigerObl-Normal.ttf')``
      *
-     * @param string $name
-     * @param string $style
-     * @param string $filename
+     * @param  string $name
+     * @param  string $style
+     * @param  string $filename
      * @return void
      */
     public function addPdfFontData(string $name, string $style, string $filename): void

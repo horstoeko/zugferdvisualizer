@@ -659,10 +659,10 @@ class BatchMarkDownGenerator
 }
 
 BatchMarkDownGenerator::generate([
-    ZugferdVisualizer::class => dirname(__FILE__) . '/Class-ZugferdVisualizer.md',
-    ZugferdVisualizerMarkupRendererContract::class => dirname(__FILE__) . '/Class-ZugferdVisualizerMarkupRendererContract.md',
-    ZugferdVisualizerDefaultRenderer::class => dirname(__FILE__) . '/Class-ZugferdVisualizerDefaultRenderer.md',
-    ZugferdVisualizerLaravelRenderer::class => dirname(__FILE__) . '/Class-ZugferdVisualizerLaravelRenderer.md',
+    ZugferdVisualizer::class => __DIR__ . '/Class-ZugferdVisualizer.md',
+    ZugferdVisualizerMarkupRendererContract::class => __DIR__ . '/Class-ZugferdVisualizerMarkupRendererContract.md',
+    ZugferdVisualizerDefaultRenderer::class => __DIR__ . '/Class-ZugferdVisualizerDefaultRenderer.md',
+    ZugferdVisualizerLaravelRenderer::class => __DIR__ . '/Class-ZugferdVisualizerLaravelRenderer.md',
 ], [
     // Nothing here
 ]);

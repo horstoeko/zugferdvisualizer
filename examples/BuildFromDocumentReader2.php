@@ -3,19 +3,19 @@
 use horstoeko\zugferd\ZugferdDocumentReader;
 use horstoeko\zugferdvisualizer\ZugferdVisualizer;
 
-require dirname(__FILE__) . "/../vendor/autoload.php";
+require __DIR__ . "/../vendor/autoload.php";
 
 // Load from existing XML file
 
-$document = ZugferdDocumentReader::readAndGuessFromFile(dirname(__FILE__) . "/invoice_2.xml");
+$document = ZugferdDocumentReader::readAndGuessFromFile(__DIR__ . "/invoice_2.xml");
 
 // Run the visualizer using the default renderer
 
 $visualizer = new ZugferdVisualizer($document);
 $visualizer->setDefaultTemplate();
-$visualizer->addPdfFontDirectory(dirname(__FILE__) . '/fonts/');
+$visualizer->addPdfFontDirectory(__DIR__ . '/fonts/');
 $visualizer->addPdfFontData('comicsans', 'R', 'comic.ttf');
 $visualizer->addPdfFontData('comicsans', 'I', 'comici.ttf');
 $visualizer->setPdfFontDefault("courier");
 $visualizer->setPdfPaperSize('A4-P');
-$visualizer->renderPdfFile(dirname(__FILE__) . "/invoice_2.pdf");
+$visualizer->renderPdfFile(__DIR__ . "/invoice_2.pdf");

@@ -38,8 +38,7 @@ class ZugferdVisualizerDefaultRenderer implements ZugferdVisualizerMarkupRendere
     {
         ob_start();
         include $template;
-        $markup = ob_get_clean();
 
-        return $markup;
+        return ob_get_clean();
     }
 }

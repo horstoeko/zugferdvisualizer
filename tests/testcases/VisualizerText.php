@@ -19,7 +19,7 @@ class VisualizerText extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$document = ZugferdDocumentReader::readAndGuessFromFile(dirname(__FILE__) . "/../assets/invoice_1.xml");
+        self::$document = ZugferdDocumentReader::readAndGuessFromFile(__DIR__ . "/../assets/invoice_1.xml");
     }
 
     /**
@@ -309,13 +309,13 @@ class VisualizerText extends TestCase
         $visualizer = new ZugferdVisualizer(static::$document);
         $visualizer->setDefaultTemplate();
 
-        $toFilename = dirname(__FILE__) . "/invoice.pdf";
+        $toFilename = __DIR__ . "/invoice.pdf";
 
         $this->registerFileForTestMethodTeardown($toFilename);
 
         $visualizer->renderPdfFile($toFilename);
 
-        $this->assertTrue(file_exists($toFilename));
+        $this->assertFileExists($toFilename);
     }
 
     /**
@@ -355,16 +355,16 @@ class VisualizerText extends TestCase
             }
         );
 
-        $toFilename = dirname(__FILE__) . "/invoice.pdf";
+        $toFilename = __DIR__ . "/invoice.pdf";
 
         $this->registerFileForTestMethodTeardown($toFilename);
 
         $visualizer->renderPdfFile($toFilename);
 
-        $this->assertTrue(file_exists($toFilename));
+        $this->assertFileExists($toFilename);
         $this->assertEquals("P", $oldOrientation);
-        $this->assertEquals("L", $newOrientation);
+        $this->assertSame("L", $newOrientation);
         $this->assertEquals("1.4", $oldPdfVersion);
-        $this->assertEquals("1.7", $newPdfVersion);
+        $this->assertSame("1.7", $newPdfVersion);
     }
 }

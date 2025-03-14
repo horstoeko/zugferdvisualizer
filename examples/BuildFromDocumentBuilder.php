@@ -7,7 +7,7 @@ use horstoeko\zugferd\codelists\ZugferdPaymentMeans;
 use horstoeko\zugferd\ZugferdDocumentPdfMerger;
 use horstoeko\zugferd\ZugferdDocumentReader;
 
-require dirname(__FILE__) . "/../vendor/autoload.php";
+require __DIR__ . "/../vendor/autoload.php";
 
 // Create an invoice document
 
@@ -57,7 +57,7 @@ $reader = ZugferdDocumentReader::readAndGuessFromContent($document->getContent()
 
 $visualizer = new ZugferdVisualizer($reader);
 $visualizer->setDefaultTemplate();
-$visualizer->addPdfFontDirectory(dirname(__FILE__) . '/fonts/');
+$visualizer->addPdfFontDirectory(__DIR__ . '/fonts/');
 $visualizer->addPdfFontData('comicsans', 'R', 'comic.ttf');
 $visualizer->addPdfFontData('comicsans', 'I', 'comici.ttf');
 $visualizer->setPdfFontDefault("courier");
@@ -67,4 +67,4 @@ $visualizer->setPdfPaperSize('A4-P');
 
 $merger = new ZugferdDocumentPdfMerger($document->getContent(), $visualizer->renderPdf());
 $merger->generateDocument();
-$merger->saveDocument(dirname(__FILE__) . "/invoice_2.pdf");
+$merger->saveDocument(__DIR__ . "/invoice_2.pdf");
